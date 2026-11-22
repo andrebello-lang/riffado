@@ -2,6 +2,7 @@
 
 import { AudioWaveform, Crop, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { FolderChip } from "@/components/library/folder-chip";
 import { LocalTimeRange } from "@/components/local-time";
 import { AudioEditorDialog } from "@/components/recordings/audio-editor-dialog";
 import { DownloadAudioButton } from "@/components/recordings/download-audio-button";
@@ -76,6 +77,9 @@ export function RecordingPlayerHeader({
                     peaks={recording.waveformPeaks ?? null}
                 />
             </CardAction>
+            <div className="flex min-w-0">
+                <FolderChip recordingId={recording.id} />
+            </div>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                 <span>
                     Recorded{" "}

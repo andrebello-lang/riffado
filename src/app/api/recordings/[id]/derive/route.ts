@@ -10,6 +10,7 @@ import { isHostedLockedOut } from "@/lib/entitlements";
 import { env } from "@/lib/env";
 import { AppError, apiHandler, ErrorCode } from "@/lib/errors";
 import { enforceStorageCap } from "@/lib/hosted/billing/storage-cap";
+import { assignRecordings, folderOfRecording } from "@/lib/library/server";
 import { renderSegmentsToMp3 } from "@/lib/recordings/derive-audio";
 import {
     MAX_RECORDING_TITLE_LENGTH,
@@ -201,6 +202,14 @@ export const POST = apiHandler<IdContext>(async (request, context) => {
             "recording_cleanup",
         );
         throw dbError;
+    }
+
+    // Biblioteca: the cut lands in the same folder as its source.
+    const sourceFolder = await folderOfRecording(userId, source.id);
+    if (sourceFolder) {
+        await assignRecordings(userId, [newId], sourceFolder).catch((err) =>
+            console.error("[derive] folder copy failed:", err),
+        );
     }
 
     return NextResponse.json({

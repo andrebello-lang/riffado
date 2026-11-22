@@ -117,6 +117,7 @@ COPY --from=builder /app/encrypt-backfill.js ./encrypt-backfill.js
 
 # Copy migrations folder
 COPY --from=builder /app/src/db/migrations ./src/db/migrations
+COPY --from=builder /app/src/db/migrations-garrido ./src/db/migrations-garrido
 
 # Copy entrypoint
 COPY docker-entrypoint.sh ./docker-entrypoint.sh

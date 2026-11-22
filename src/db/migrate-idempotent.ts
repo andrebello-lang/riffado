@@ -79,6 +79,13 @@ const main = async () => {
             migrationsFolder: "./src/db/migrations",
         });
         console.log(`✅ Migrations completed in ${Date.now() - start}ms`);
+        // Garrido fork tables: own folder + own journal table so they
+        // never collide with upstream migration numbering.
+        await migrate(drizzle(sql), {
+            migrationsFolder: "./src/db/migrations-garrido",
+            migrationsTable: "__drizzle_migrations_garrido",
+        });
+        console.log("✅ Garrido migrations completed");
     } finally {
         await sql`SELECT pg_advisory_unlock(${ADVISORY_LOCK_ID})`;
         console.log("🔓 Lock released");

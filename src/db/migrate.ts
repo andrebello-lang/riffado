@@ -14,6 +14,10 @@ const runMigrate = async () => {
 
     const start = Date.now();
     await migrate(db, { migrationsFolder: "./src/db/migrations" });
+    await migrate(db, {
+        migrationsFolder: "./src/db/migrations-garrido",
+        migrationsTable: "__drizzle_migrations_garrido",
+    });
     const end = Date.now();
 
     console.log("✅ Migrations completed in", end - start, "ms");

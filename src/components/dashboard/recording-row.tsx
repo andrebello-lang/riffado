@@ -1,7 +1,18 @@
 "use client";
 
-import { Download, Loader2, MoreHorizontal, Play, Trash2 } from "lucide-react";
+import {
+    Download,
+    FolderInput,
+    Loader2,
+    MoreHorizontal,
+    Play,
+    Trash2,
+} from "lucide-react";
 import { useConfirm } from "@/components/confirm-dialog";
+import {
+    RECORDING_DRAG_TYPE,
+    useLibrary,
+} from "@/components/library/library-context";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -41,6 +52,7 @@ export function RecordingRow({
     registerRef: (id: string, el: HTMLButtonElement | null) => void;
 }) {
     const confirm = useConfirm();
+    const library = useLibrary();
     return (
         <div
             className={cn(
@@ -56,6 +68,12 @@ export function RecordingRow({
                 }}
                 type="button"
                 onClick={() => onSelect(recording)}
+                draggable={library !== null}
+                onDragStart={(e) => {
+                    e.dataTransfer.setData(RECORDING_DRAG_TYPE, recording.id);
+                    e.dataTransfer.setData("text/plain", recording.filename);
+                    e.dataTransfer.effectAllowed = "move";
+                }}
                 className={cn(
                     "w-full text-left transition-colors hover:bg-accent/60",
                     rowPadding,
@@ -131,6 +149,16 @@ export function RecordingRow({
                             <Download />
                             Download audio
                         </DropdownMenuItem>
+                        {library && (
+                            <DropdownMenuItem
+                                onSelect={() =>
+                                    library.openMoveDialog([recording.id])
+                                }
+                            >
+                                <FolderInput />
+                                Mover para pasta…
+                            </DropdownMenuItem>
+                        )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             variant="destructive"

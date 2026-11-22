@@ -15,6 +15,11 @@ import { TrialBanner } from "@/components/dashboard/trial-banner";
 import { WorkstationDetailPane } from "@/components/dashboard/workstation-detail-pane";
 import { WorkstationEmptyState } from "@/components/dashboard/workstation-empty-state";
 import { WorkstationHeader } from "@/components/dashboard/workstation-header";
+import {
+    LibraryProvider,
+    useLibrary,
+} from "@/components/library/library-context";
+import { LibraryPanel } from "@/components/library/library-panel";
 import { OnboardingDialog } from "@/components/onboarding-dialog";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { useAutoSync } from "@/hooks/use-auto-sync";
@@ -23,6 +28,7 @@ import { useProviderList } from "@/hooks/use-provider-list";
 import { useTheme } from "@/hooks/use-theme";
 import { useTranscribeQueue } from "@/hooks/use-transcribe-queue";
 import { useUploadQueue } from "@/hooks/use-upload-queue";
+import type { LibraryData } from "@/lib/library/types";
 import {
     requestNotificationPermission,
     showNewRecordingNotification,
@@ -79,6 +85,30 @@ interface WorkstationProps {
      * hosted-mode behavior by forgetting to thread the value through.
      */
     isHosted: boolean;
+    /** Biblioteca (folders). Server-supplied. */
+    library?: LibraryData;
+}
+
+const EMPTY_LIBRARY: LibraryData = {
+    folders: [],
+    assignments: {},
+    origins: {},
+};
+
+/** Wraps the dashboard in the Biblioteca (folders) provider. */
+export function Workstation(props: WorkstationProps) {
+    const recordingIds = useMemo(
+        () => props.recordings.map((r) => r.id),
+        [props.recordings],
+    );
+    return (
+        <LibraryProvider
+            library={props.library ?? EMPTY_LIBRARY}
+            recordingIds={recordingIds}
+        >
+            <WorkstationInner {...props} />
+        </LibraryProvider>
+    );
 }
 
 /**
@@ -97,7 +127,7 @@ interface WorkstationProps {
  *  - deletes stay here because they need access to currentRecording
  *    / visibleRecordings to pick the next selection.
  */
-export function Workstation({
+function WorkstationInner({
     recordings,
     transcriptions,
     isAdmin = false,
@@ -144,15 +174,32 @@ export function Workstation({
     const { theme, setTheme } = useTheme(initialSettings.theme);
     const listRef = useRef<RecordingListHandle>(null);
 
-    // Filter out optimistically-hidden (deleted) rows.
+    // Filter out optimistically-hidden (deleted) rows, then apply the
+    // Biblioteca folder/view selected in the library panel.
+    const libraryFilter = useLibrary()?.viewFilter ?? null;
     const visibleRecordings = useMemo(
         () =>
             applyFilenameOverrides(
-                recordings.filter((r) => !hiddenIds.has(r.id)),
+                recordings.filter(
+                    (r) =>
+                        !hiddenIds.has(r.id) &&
+                        (libraryFilter === null || libraryFilter(r.id)),
+                ),
                 filenameOverrides,
             ),
-        [recordings, hiddenIds, filenameOverrides],
+        [recordings, hiddenIds, filenameOverrides, libraryFilter],
     );
+
+    // Switching Biblioteca folder: keep the player on something the
+    // filtered list actually shows.
+    useEffect(() => {
+        if (libraryFilter === null) return;
+        setCurrentRecording((prev) =>
+            prev && libraryFilter(prev.id)
+                ? prev
+                : (recordings.find((r) => libraryFilter(r.id)) ?? null),
+        );
+    }, [libraryFilter, recordings]);
 
     const currentTranscription = currentRecording
         ? transcriptions.get(currentRecording.id)
@@ -383,8 +430,7 @@ export function Workstation({
                         onReconnected={handleReconnected}
                     />
 
-                    {visibleRecordings.length === 0 &&
-                    pendingUploads.length === 0 ? (
+                    {recordings.length === 0 && pendingUploads.length === 0 ? (
                         <WorkstationEmptyState
                             isSyncing={isAutoSyncing}
                             onSync={handleSync}
@@ -408,6 +454,7 @@ export function Workstation({
                                     mobileView === "detail" && "hidden",
                                 )}
                             >
+                                <LibraryPanel />
                                 <RecordingList
                                     ref={listRef}
                                     recordings={visibleRecordings}

@@ -12,6 +12,7 @@ import { requireAuth } from "@/lib/auth-server";
 import { decryptText } from "@/lib/encryption/fields";
 import { env } from "@/lib/env";
 import { isAdminEmail } from "@/lib/hosted/admin/guard";
+import { loadLibrary } from "@/lib/library/server";
 import { initialSettingsFromRow } from "@/lib/settings/initial-settings";
 import { serializeRecording } from "@/types/recording";
 
@@ -24,6 +25,7 @@ export default async function DashboardPage() {
         userSummaryRows,
         [settingsRow],
         [connectionRow],
+        library,
     ] = await Promise.all([
         db
             .select({
@@ -80,6 +82,7 @@ export default async function DashboardPage() {
             .from(plaudConnections)
             .where(eq(plaudConnections.userId, session.user.id))
             .limit(1),
+        loadLibrary(session.user.id),
     ]);
     const summaryIds = new Set(userSummaryRows.map((r) => r.recordingId));
     const transcriptIds = new Set(userTranscriptions.map((t) => t.recordingId));
@@ -125,6 +128,7 @@ export default async function DashboardPage() {
                 connectionRow?.sessionExpiresAt?.toISOString() ?? null
             }
             isHosted={env.IS_HOSTED}
+            library={library}
         />
     );
 }
