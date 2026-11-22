@@ -16,6 +16,7 @@ import { env } from "@/lib/env";
 import { AppError, ErrorCode } from "@/lib/errors";
 import { enforceStorageCap } from "@/lib/hosted/billing/storage-cap";
 import { mynahSecondsForDuration } from "@/lib/hosted/transcription/mynah";
+import { importPlaudFolders } from "@/lib/library/plaud-import";
 import { sendNewRecordingBarkNotification } from "@/lib/notifications/bark";
 import { sendNewRecordingEmail } from "@/lib/notifications/email";
 import { createPlaudClient } from "@/lib/plaud/client-factory";
@@ -1024,6 +1025,17 @@ async function runSyncRecordingsForUser(userId: string): Promise<SyncResult> {
                     eq(plaudConnections.userId, userId),
                 ),
             );
+
+        // Biblioteca: mirror Plaud 4.0 folders. Read-only towards Plaud and
+        // never fails the sync.
+        if (plaudClient.usingPlaudV4) {
+            try {
+                const layout = await plaudClient.getFolderLayoutV4();
+                if (layout) await importPlaudFolders(userId, layout);
+            } catch (error) {
+                console.error("[sync] Plaud folder import failed:", error);
+            }
+        }
 
         if (
             context.emailNotifications &&

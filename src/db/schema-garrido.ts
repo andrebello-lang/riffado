@@ -39,6 +39,9 @@ export const libraryFolders = pgTable(
         sortOrder: integer("sort_order").notNull().default(0),
         // Plaud 4.0 folder node this folder mirrors (import), if any.
         plaudNodeId: varchar("plaud_node_id", { length: 255 }),
+        // Set when a Plaud-imported folder is deleted in Riffado, so the
+        // next sync does not recreate it. Hidden folders are not listed.
+        hiddenAt: timestamp("hidden_at"),
         createdAt: timestamp("created_at").notNull().defaultNow(),
         updatedAt: timestamp("updated_at").notNull().defaultNow(),
     },
@@ -61,9 +64,11 @@ export const libraryRecordingFolders = pgTable(
         userId: text("user_id")
             .notNull()
             .references(() => users.id, { onDelete: "cascade" }),
-        folderId: text("folder_id")
-            .notNull()
-            .references(() => libraryFolders.id, { onDelete: "cascade" }),
+        // Null = the user chose "Sem pasta" by hand (source 'manual'), which
+        // keeps Plaud folder import from placing the recording again.
+        folderId: text("folder_id").references(() => libraryFolders.id, {
+            onDelete: "cascade",
+        }),
         // 'manual' (moved in Riffado) or 'plaud' (imported). Plaud import
         // never overrides a manual placement.
         source: varchar("source", { length: 10 }).notNull().default("manual"),

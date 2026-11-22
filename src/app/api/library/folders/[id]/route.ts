@@ -1,7 +1,7 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { db } from "@/db";
-import { libraryFolders } from "@/db/schema-garrido";
+import { libraryFolders, libraryRecordingFolders } from "@/db/schema-garrido";
 import { requireApiSession } from "@/lib/auth-server";
 import { encryptText } from "@/lib/encryption/fields";
 import { AppError, apiHandler, ErrorCode } from "@/lib/errors";
@@ -116,17 +116,70 @@ export const PATCH = apiHandler<IdContext>(async (request, context) => {
 
 /**
  * DELETE: removes the folder and its subfolders. Recordings inside are
- * NOT deleted; they go back to "Sem pasta" (FK cascade on placements).
+ * NOT deleted; they go back to "Sem pasta". When the subtree holds folders
+ * imported from Plaud, the subtree is hidden instead of deleted so the next
+ * sync does not recreate it.
  */
 export const DELETE = apiHandler<IdContext>(async (request, context) => {
     const session = await requireApiSession(request);
     const userId = session.user.id;
     const { id } = await (context as IdContext).params;
     await requireFolder(userId, id);
-    await db
-        .delete(libraryFolders)
+
+    const rows = await db
+        .select({
+            id: libraryFolders.id,
+            parentId: libraryFolders.parentId,
+            plaudNodeId: libraryFolders.plaudNodeId,
+        })
+        .from(libraryFolders)
         .where(
-            and(eq(libraryFolders.id, id), eq(libraryFolders.userId, userId)),
+            and(
+                eq(libraryFolders.userId, userId),
+                isNull(libraryFolders.hiddenAt),
+            ),
         );
+    const subtree = new Set([id]);
+    let grew = true;
+    while (grew) {
+        grew = false;
+        for (const r of rows) {
+            if (r.parentId && subtree.has(r.parentId) && !subtree.has(r.id)) {
+                subtree.add(r.id);
+                grew = true;
+            }
+        }
+    }
+    const ids = [...subtree];
+    const hasPlaud = rows.some((r) => subtree.has(r.id) && r.plaudNodeId);
+
+    if (hasPlaud) {
+        await db
+            .delete(libraryRecordingFolders)
+            .where(
+                and(
+                    eq(libraryRecordingFolders.userId, userId),
+                    inArray(libraryRecordingFolders.folderId, ids),
+                ),
+            );
+        await db
+            .update(libraryFolders)
+            .set({ hiddenAt: new Date(), updatedAt: new Date() })
+            .where(
+                and(
+                    eq(libraryFolders.userId, userId),
+                    inArray(libraryFolders.id, ids),
+                ),
+            );
+    } else {
+        await db
+            .delete(libraryFolders)
+            .where(
+                and(
+                    eq(libraryFolders.id, id),
+                    eq(libraryFolders.userId, userId),
+                ),
+            );
+    }
     return NextResponse.json({ success: true });
 });

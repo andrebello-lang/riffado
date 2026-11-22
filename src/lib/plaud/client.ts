@@ -11,6 +11,7 @@ import type {
     PlaudV4FileDetailResponse,
     PlaudV4FolderChildrenResponse,
     PlaudV4Node,
+    PlaudV4RecordingItem,
     PlaudV4RecordingsResponse,
     PlaudV4RenameResponse,
 } from "@/types/plaud";
@@ -27,6 +28,7 @@ import {
     recordingIdToPlaudV4FileId,
     sortPlaudRecordings,
 } from "./v4";
+import { buildPlaudFolderLayout, type PlaudFolderLayout } from "./v4-folders";
 import { resolveWorkspaceToken } from "./workspace";
 
 const V4_PAGE_SIZE = 50;
@@ -121,6 +123,7 @@ export class PlaudClient {
     private mintRefreshError?: unknown;
     private v4Mode = false;
     private v4ListCache?: PlaudRecording[];
+    private v4RawItems?: PlaudV4RecordingItem[];
     private readonly v4DetailCache = new Map<
         string,
         NonNullable<PlaudV4FileDetailResponse["data"]>
@@ -481,6 +484,7 @@ export class PlaudClient {
         if (this.v4ListCache) return this.v4ListCache;
 
         const out: PlaudRecording[] = [];
+        const raw: PlaudV4RecordingItem[] = [];
         let cursor: string | undefined;
         for (let page = 0; page < V4_MAX_PAGES; page++) {
             const params = new URLSearchParams({
@@ -503,7 +507,9 @@ export class PlaudClient {
                 );
             }
             for (const item of body.data.items) {
-                if (item?.file_id) out.push(mapPlaudV4Item(item));
+                if (!item?.file_id) continue;
+                out.push(mapPlaudV4Item(item));
+                raw.push(item);
             }
             const next = body.data.next_cursor;
             if (!next || body.data.items.length === 0) break;
@@ -511,6 +517,53 @@ export class PlaudClient {
         }
 
         this.v4ListCache = out;
+        this.v4RawItems = raw;
+        return out;
+    }
+
+    /**
+     * Plaud 4.0 user folders and the folder each recording is shown in.
+     * Read-only. Returns null for accounts still on the legacy file API.
+     */
+    async getFolderLayoutV4(): Promise<PlaudFolderLayout | null> {
+        if (!this.v4Mode) return null;
+        if (!this.v4RawItems) {
+            this.v4ListCache = undefined;
+            await this.listAllRecordingsV4();
+        }
+        return buildPlaudFolderLayout(this.v4RawItems ?? [], (nodeId) =>
+            this.listFolderChildrenV4(nodeId),
+        );
+    }
+
+    private async listFolderChildrenV4(
+        nodeId: string | null,
+    ): Promise<PlaudV4Node[]> {
+        const out: PlaudV4Node[] = [];
+        let cursor: string | undefined;
+        for (let page = 0; page < 20; page++) {
+            const params = new URLSearchParams({
+                page_size: V4_PAGE_SIZE.toString(),
+            });
+            if (nodeId) params.set("node_id", nodeId);
+            if (cursor) params.set("cursor", cursor);
+            const body = await this.request<PlaudV4FolderChildrenResponse>(
+                `/file-app/v4/folders/children?${params.toString()}`,
+            );
+            if (body?.status !== 0) {
+                throw new AppError(
+                    ErrorCode.PLAUD_API_ERROR,
+                    body?.msg || "Plaud returned an invalid folder listing.",
+                    400,
+                    { plaudStatus: body?.status },
+                );
+            }
+            const items = body.data?.items ?? [];
+            out.push(...items);
+            const next = body.data?.next_cursor;
+            if (!next || items.length === 0) break;
+            cursor = next;
+        }
         return out;
     }
 

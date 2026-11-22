@@ -13,6 +13,7 @@ import {
     RECORDING_DRAG_TYPE,
     useLibrary,
 } from "@/components/library/library-context";
+import { RecordingFolderLine } from "@/components/library/recording-folder-line";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -120,6 +121,10 @@ export function RecordingRow({
                             )}
                         </p>
                     )}
+                    <RecordingFolderLine
+                        recordingId={recording.id}
+                        className={isCompact ? "mt-0.5" : "mt-1"}
+                    />
                 </div>
             </button>
             <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover/row:opacity-100 focus-within:opacity-100 has-[[data-state=open]]:opacity-100">

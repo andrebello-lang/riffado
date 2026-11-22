@@ -51,6 +51,14 @@ export interface PlaudV4RecordingItem {
     updated_at_show_ms?: number;
     status?: number;
     version_ms?: number;
+    /** Folder the recording is shown in (system folder, user folder, or another recording's own folder). */
+    parent_folder?: PlaudV4FolderRef | null;
+}
+
+export interface PlaudV4FolderRef {
+    folder_id?: string;
+    name?: string;
+    system_folder_type?: number; // 0 = user folder; 1 Recordings, 2 Import, 6 Welcome
 }
 
 export interface PlaudV4RecordingsResponse {
@@ -90,6 +98,12 @@ export interface PlaudV4Node {
     version_ms?: number;
     folder?: { folder_id?: string; name?: string } | null; // per-recording folder
     breadcrumbs?: { node_id?: string; name?: string }[];
+    type?: number; // 1 = folder, 2 = file
+    system_folder_type?: number;
+    icon?: string | null;
+    color?: string | null; // e.g. "folder-color-blue"
+    created_at_show_ms?: number;
+    trashed_at_ms?: number;
 }
 
 export interface PlaudV4RenameResponse {

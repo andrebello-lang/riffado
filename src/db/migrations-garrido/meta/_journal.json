@@ -8,6 +8,20 @@
       "when": 1795383643261,
       "tag": "0000_library",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795383986187,
+      "tag": "0001_folder_hidden",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1795384027589,
+      "tag": "0002_manual_unfiled",
+      "breakpoints": true
     }
   ]
 }

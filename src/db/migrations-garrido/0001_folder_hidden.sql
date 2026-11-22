@@ -1,0 +1,1 @@
+ALTER TABLE "library_folders" ADD COLUMN "hidden_at" timestamp;

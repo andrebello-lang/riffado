@@ -1,0 +1,1 @@
+ALTER TABLE "library_recording_folders" ALTER COLUMN "folder_id" DROP NOT NULL;
