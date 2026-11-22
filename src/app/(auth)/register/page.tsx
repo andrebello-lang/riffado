@@ -34,8 +34,8 @@ export default async function RegisterPage() {
 
     return (
         <SelfHostAuthChrome
-            title="Create your account"
-            subtitle="The first account on a new Riffado instance becomes the admin."
+            title="Criar sua conta"
+            subtitle="A primeira conta criada no Brieffado vira a administradora."
         >
             <RegisterForm
                 requireEmailVerification={emailVerificationRequired}

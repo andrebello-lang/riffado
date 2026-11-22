@@ -2,14 +2,13 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: "Riffado",
-        short_name: "Riffado",
-        description:
-            "Open-source AI transcription for the voice recorder you already own.",
+        name: "Brieffado",
+        short_name: "Brieffado",
+        description: "Seu segundo cérebro para reuniões, aulas e ideias.",
         start_url: "/",
         display: "standalone",
-        background_color: "#0a0a0a",
-        theme_color: "#0a0a0a",
+        background_color: "#fafafa",
+        theme_color: "#fafafa",
         icons: [
             {
                 src: "/icon-192.png",

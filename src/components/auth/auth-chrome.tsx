@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { BrieffadoWordmark } from "@/components/brand/brieffado-logo";
 import { LogoWordmark } from "@/components/icons/logo";
 import { Panel } from "@/components/panel";
+import { BRIEFFADO_SOURCE_URL } from "@/lib/brand";
 
 interface AuthChromeProps {
     /** Headline above the form. e.g. "Sign in" / "Create account". */
@@ -177,8 +179,8 @@ export function SelfHostAuthChrome({
         <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
             <div className="relative z-10 w-full max-w-md space-y-6">
                 <div className="flex justify-center">
-                    <Link href="/" aria-label="Riffado">
-                        <LogoWordmark className="h-7 w-auto text-foreground" />
+                    <Link href="/" aria-label="Brieffado">
+                        <BrieffadoWordmark className="text-3xl text-foreground" />
                     </Link>
                 </div>
                 <Panel className="space-y-6">
@@ -204,35 +206,27 @@ function InstanceFooter() {
     return (
         <div className="flex justify-center text-xs text-muted-foreground font-mono">
             <div className="flex items-center gap-4">
-                <Link
-                    href="https://riffado.com/docs"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground"
-                >
-                    Docs
-                </Link>
+                <span>
+                    Baseado no{" "}
+                    <Link
+                        href="https://github.com/riffado/riffado"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline decoration-dotted underline-offset-2 hover:text-foreground"
+                    >
+                        Riffado
+                    </Link>
+                </span>
                 <span aria-hidden className="text-muted-foreground/40">
                     ·
                 </span>
                 <Link
-                    href="https://github.com/riffado/riffado"
+                    href={BRIEFFADO_SOURCE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="hover:text-foreground"
                 >
-                    GitHub
-                </Link>
-                <span aria-hidden className="text-muted-foreground/40">
-                    ·
-                </span>
-                <Link
-                    href="https://riffado.com/discord"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-foreground"
-                >
-                    Discord
+                    Código-fonte (AGPL-3.0)
                 </Link>
             </div>
         </div>

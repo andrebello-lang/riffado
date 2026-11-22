@@ -137,7 +137,7 @@ export function OnboardingDialog({
             >
                 <DialogHeader>
                     <DialogTitle className="text-2xl" hidden>
-                        Welcome to Riffado
+                        Bem-vindo ao Brieffado
                     </DialogTitle>
                 </DialogHeader>
 

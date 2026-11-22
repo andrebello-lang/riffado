@@ -28,8 +28,8 @@ export default async function LoginPage() {
 
     return (
         <SelfHostAuthChrome
-            title="Sign in"
-            subtitle="Sign in to your Riffado instance."
+            title="Entrar"
+            subtitle="Seu segundo cérebro para reuniões, aulas e ideias."
         >
             <LoginForm {...formProps} />
         </SelfHostAuthChrome>

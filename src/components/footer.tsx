@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { BrieffadoMark } from "@/components/brand/brieffado-logo";
 import { Github } from "@/components/icons/icons";
-import { Logo } from "@/components/icons/logo";
 import { ReportBugButton } from "@/components/report-bug-dialog";
 import { UpdateBadge } from "@/components/update-badge";
+import { BRIEFFADO_SOURCE_URL, UPSTREAM_URL } from "@/lib/brand";
 import { env } from "@/lib/env";
 import { APP_RELEASE_URL, APP_VERSION_TAG } from "@/lib/version";
 
@@ -34,9 +35,18 @@ export function Footer() {
             <div className="container mx-auto px-4 py-3 max-w-7xl">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-muted-foreground font-mono">
                     <div className="flex items-center gap-2">
-                        <Logo className="size-4" />
+                        <BrieffadoMark className="h-4 w-auto text-foreground" />
                         <span>
-                            © {currentYear} Riffado · Licensed under{" "}
+                            © {currentYear} Brieffado · baseado no{" "}
+                            <Link
+                                href={UPSTREAM_URL}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hover:text-foreground transition-colors underline decoration-dotted underline-offset-2"
+                            >
+                                Riffado
+                            </Link>{" "}
+                            ·{" "}
                             <Link
                                 href="https://www.gnu.org/licenses/agpl-3.0.html"
                                 target="_blank"
@@ -63,7 +73,7 @@ export function Footer() {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-foreground transition-colors"
-                            aria-label={`Release notes for Riffado ${APP_VERSION_TAG}`}
+                            aria-label={`Notas da versão ${APP_VERSION_TAG} do Riffado`}
                         >
                             {APP_VERSION_TAG}
                         </Link>
@@ -99,11 +109,11 @@ export function Footer() {
                             className="hover:text-foreground transition-colors"
                         />
                         <Link
-                            href="https://github.com/riffado/riffado"
+                            href={BRIEFFADO_SOURCE_URL}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="hover:text-foreground transition-colors"
-                            aria-label="View source code on GitHub"
+                            aria-label="Código-fonte do Brieffado no GitHub"
                         >
                             <Github className="size-4" />
                         </Link>

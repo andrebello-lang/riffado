@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
 import { AppProgress } from "@/components/app-progress";
 import { ConfirmDialogProvider } from "@/components/confirm-dialog";
 import { OpenAnalytics } from "@/components/open-analytics";
@@ -10,9 +10,15 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { env } from "@/lib/env";
 import "./globals.css";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
+const inter = Inter({
+    variable: "--font-inter",
     subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+    variable: "--font-space-grotesk",
+    subsets: ["latin"],
+    weight: ["500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -30,41 +36,25 @@ export const metadata: Metadata = {
     // self-host deployments override it at runtime via env.
     metadataBase: new URL(env.APP_URL ?? "https://riffado.com"),
     title: {
-        default: "Riffado — Open-source AI transcription for voice recorders",
-        template: "%s · Riffado",
+        default:
+            "Brieffado · Seu segundo cérebro para reuniões, aulas e ideias",
+        template: "%s · Brieffado",
     },
     description:
-        "Open-source transcription for the voice recorder you already own. Choose your AI, own your transcripts, deploy where you want. Currently supports the Plaud Note family: Note, Note Pro, and NotePin.",
-    applicationName: "Riffado",
+        "Seu segundo cérebro para reuniões, aulas e ideias. Baseado no Riffado (AGPL-3.0).",
+    applicationName: "Brieffado",
     manifest: "/manifest.webmanifest",
-    openGraph: {
-        type: "website",
-        siteName: "Riffado",
-        title: "Riffado — Open-source AI transcription for voice recorders",
-        description:
-            "Open-source transcription for the voice recorder you already own. Choose your AI, own your transcripts, deploy where you want.",
-        images: [{ url: "/og-home.png", width: 1200, height: 630 }],
-    },
-    twitter: {
-        card: "summary_large_image",
-        site: "@riffadohq",
-        creator: "@riffadohq",
-        title: "Riffado — Open-source AI transcription for voice recorders",
-        description:
-            "Open-source transcription for the voice recorder you already own. Choose your AI, own your transcripts, deploy where you want.",
-        images: ["/og-home.png"],
-    },
     appleWebApp: {
         capable: true,
-        title: "Riffado",
-        statusBarStyle: "black-translucent",
+        title: "Brieffado",
+        statusBarStyle: "default",
     },
 };
 
 export const viewport: Viewport = {
     themeColor: [
-        { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-        { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+        { media: "(prefers-color-scheme: light)", color: "#fafafa" },
+        { media: "(prefers-color-scheme: dark)", color: "#161616" },
     ],
 };
 
@@ -74,10 +64,12 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" suppressHydrationWarning>
-            <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-            >
+        <html
+            lang="pt-BR"
+            suppressHydrationWarning
+            className={`${inter.variable} ${spaceGrotesk.variable} ${geistMono.variable}`}
+        >
+            <body className="antialiased">
                 <AppProgress>
                     <ThemeProvider
                         attribute="class"

@@ -12,12 +12,11 @@ export function OnboardingStepWelcome() {
                 <div className="size-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
                     <Mic className="size-8 text-primary" />
                 </div>
-                <h3 className="text-xl font-semibold">
-                    Your AI-Powered Recording Hub
-                </h3>
+                <h3 className="text-xl font-semibold">Seu segundo cérebro</h3>
                 <p className="text-muted-foreground">
-                    Riffado helps you manage, transcribe, and enhance your Plaud
-                    recordings with AI. Let's set up your account.
+                    O Brieffado captura suas reuniões, aulas e apresentações e
+                    devolve tópicos, tarefas e as melhores ideias. Vamos
+                    configurar sua conta.
                 </p>
             </div>
 
@@ -233,7 +232,7 @@ export function OnboardingStepComplete({
                 </div>
                 <h3 className="text-xl font-semibold">You're All Set!</h3>
                 <p className="text-muted-foreground">
-                    Start recording and let Riffado handle the rest
+                    Pode capturar: o Brieffado cuida do resto.
                 </p>
             </div>
 
