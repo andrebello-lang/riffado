@@ -54,6 +54,16 @@ restrict access, don't email it.
 
 The backup does **not** include audio files. Back those up separately.
 
+### Biblioteca (folders)
+
+The full-data archive's `manifest.json` (version `2.1`) lists every
+visible folder under `library.folders` (`id`, `parentId`, `name`,
+`path`, `color`, `icon`, `createdAt`, `fromPlaud`) and gives each
+recording a `folder` field (`{ id, path }`, or `null` for "Sem pasta").
+`/api/export?format=json` adds the folder `path` per recording, and
+`txt` adds a `Pasta:` line. A Postgres-level restore carries the
+folders as well, since they live in the same database.
+
 ## Backup the audio files
 
 - **Local storage backend.** The Docker volume that mounts at

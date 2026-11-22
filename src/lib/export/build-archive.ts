@@ -4,6 +4,7 @@ import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { aiEnhancements, recordings, transcriptions } from "@/db/schema";
 import { decryptJsonField, decryptText } from "@/lib/encryption/fields";
+import { type ExportedFolder, loadLibraryExport } from "@/lib/library/export";
 import type { StorageProvider } from "@/lib/storage/types";
 
 export interface ArchiveResult {
@@ -24,6 +25,8 @@ interface ManifestRecording {
     audio: { included: boolean; path: string | null; reason?: string };
     transcript: { included: boolean; path: string | null };
     summary: { included: boolean; path: string | null };
+    /** Biblioteca folder ({ id, path }), or null for "Sem pasta". */
+    folder: { id: string; path: string } | null;
 }
 
 function audioExtension(storagePath: string): string {
@@ -112,6 +115,8 @@ export async function buildAndUploadExportArchive(input: {
         ]),
     );
 
+    const library = await loadLibraryExport(userId);
+
     const archive = new ZipArchive({ zlib: { level: 6 } });
     const passthrough = new PassThrough();
     // Count bytes as they flow through rather than re-reading the
@@ -173,12 +178,14 @@ export async function buildAndUploadExportArchive(input: {
         createdAt: string;
         userId: string;
         audioOmittedCount: number;
+        library: { folders: ExportedFolder[] };
         recordings: ManifestRecording[];
     } = {
-        version: "2.0",
+        version: "2.1",
         createdAt: new Date().toISOString(),
         userId,
         audioOmittedCount: 0,
+        library: { folders: library.folders },
         recordings: [],
     };
 
@@ -208,6 +215,7 @@ export async function buildAndUploadExportArchive(input: {
             audio: { included: false, path: null },
             transcript: { included: false, path: null },
             summary: { included: false, path: null },
+            folder: library.folderOf(recording.id),
         };
 
         let audioExists = false;

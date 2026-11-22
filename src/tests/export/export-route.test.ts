@@ -22,6 +22,14 @@ vi.mock("@/lib/encryption/fields", () => ({
             : v,
 }));
 
+vi.mock("@/lib/library/export", () => ({
+    loadLibraryExport: vi.fn().mockResolvedValue({
+        folders: [],
+        folderOf: (id: string) =>
+            id === "rec-1" ? { id: "f-1", path: "Visitação › Julliany" } : null,
+    }),
+}));
+
 import { GET } from "@/app/api/export/route";
 import { db } from "@/db";
 import { requireApiSession } from "@/lib/auth-server";
@@ -96,6 +104,7 @@ describe("GET /api/export (regression: summary decryption)", () => {
         expect(body[0].summary.summary).toBe("A concise summary");
         expect(body[0].summary.actionItems).toEqual(["do a thing"]);
         expect(body[0].summary.keyPoints).toEqual(["key point"]);
+        expect(body[0].folder).toBe("Visitação › Julliany");
         // Never leak the raw ciphertext prefix into the export.
         expect(JSON.stringify(body)).not.toContain("enc:");
     });

@@ -10,6 +10,7 @@ import {
 import { requireApiSession } from "@/lib/auth-server";
 import { decryptJsonField, decryptText } from "@/lib/encryption/fields";
 import { AppError, apiHandler, ErrorCode } from "@/lib/errors";
+import { loadLibraryExport } from "@/lib/library/export";
 import { captureServerEvent } from "@/lib/posthog-server";
 
 // GET - Export recordings in specified format
@@ -84,6 +85,7 @@ export const GET = apiHandler(async (request: Request) => {
             { ...t, text: decryptText(t.text) },
         ]),
     );
+    const library = await loadLibraryExport(session.user.id);
     const decryptedRecordings = userRecordings.map((r) => ({
         ...r,
         filename: decryptText(r.filename),
@@ -105,6 +107,7 @@ export const GET = apiHandler(async (request: Request) => {
                         duration: recording.duration,
                         startTime: recording.startTime,
                         filesize: recording.filesize,
+                        folder: library.folderOf(recording.id)?.path ?? null,
                         transcription:
                             transcriptionMap.get(recording.id)?.text || null,
                         summary: enhancement
@@ -127,7 +130,9 @@ export const GET = apiHandler(async (request: Request) => {
             exportData = decryptedRecordings
                 .map((recording) => {
                     const transcription = transcriptionMap.get(recording.id);
-                    return `${recording.filename}\n${new Date(recording.startTime).toISOString()}\n${transcription?.text || "No transcription"}\n\n---\n\n`;
+                    const folder = library.folderOf(recording.id);
+                    const folderLine = folder ? `Pasta: ${folder.path}\n` : "";
+                    return `${recording.filename}\n${new Date(recording.startTime).toISOString()}\n${folderLine}${transcription?.text || "No transcription"}\n\n---\n\n`;
                 })
                 .join("");
             contentType = "text/plain";
