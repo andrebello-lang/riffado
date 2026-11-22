@@ -1,9 +1,12 @@
 "use client";
 
-import { AudioWaveform, Loader2 } from "lucide-react";
+import { AudioWaveform, Crop, Loader2 } from "lucide-react";
+import { useState } from "react";
 import { LocalTimeRange } from "@/components/local-time";
+import { AudioEditorDialog } from "@/components/recordings/audio-editor-dialog";
 import { DownloadAudioButton } from "@/components/recordings/download-audio-button";
 import { RecordingTitle } from "@/components/recordings/recording-title";
+import { Button } from "@/components/ui/button";
 import { CardAction, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatBytes } from "@/lib/format-bytes";
 import { formatDuration } from "@/lib/format-duration";
@@ -37,6 +40,7 @@ export function RecordingPlayerHeader({
     onDecodeWaveform,
     onRenamed,
 }: Props) {
+    const [editorOpen, setEditorOpen] = useState(false);
     const metaParts: string[] = [
         formatDuration(duration || recording.duration / 1000),
         formatBytes(recording.filesize),
@@ -52,8 +56,25 @@ export function RecordingPlayerHeader({
                     className="text-lg"
                 />
             </CardTitle>
-            <CardAction>
+            <CardAction className="flex items-center gap-1">
+                <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => setEditorOpen(true)}
+                    aria-label="Editar áudio (recortar)"
+                    title="Editar áudio (recortar)"
+                >
+                    <Crop className="size-4" />
+                </Button>
                 <DownloadAudioButton recordingId={recording.id} />
+                <AudioEditorDialog
+                    open={editorOpen}
+                    onOpenChange={setEditorOpen}
+                    recordingId={recording.id}
+                    filename={recording.filename}
+                    durationMs={recording.duration}
+                    peaks={recording.waveformPeaks ?? null}
+                />
             </CardAction>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                 <span>
