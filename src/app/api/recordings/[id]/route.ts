@@ -7,6 +7,7 @@ import {
     transcriptions,
     webhookDeliveries,
 } from "@/db/schema";
+import { deleteAttachmentsForRecording } from "@/lib/attachments/server";
 import { requireApiSession } from "@/lib/auth-server";
 import { decryptText, encryptText } from "@/lib/encryption/fields";
 import { AppError, apiHandler, ErrorCode } from "@/lib/errors";
@@ -247,6 +248,7 @@ export const DELETE = apiHandler<IdContext>(async (request, context) => {
         }
         // Object already absent — continue with tombstone.
     }
+    await deleteAttachmentsForRecording(userId, id);
 
     // 2. Atomic DB writes: child rows, webhook delivery payload redaction,
     //    and tombstone in one transaction.

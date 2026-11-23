@@ -9,6 +9,11 @@
 
 import { beforeEach, describe, expect, it, type Mock, vi } from "vitest";
 
+vi.mock("@/lib/attachments/server", () => ({
+    buildAttachmentContext: vi.fn().mockResolvedValue({ text: "", count: 0 }),
+    deleteAttachmentsForRecording: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock("@/db", () => ({
     db: {
         select: vi.fn(),

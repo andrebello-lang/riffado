@@ -20,6 +20,12 @@
 
 import { APIError } from "openai";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/attachments/server", () => ({
+    buildAttachmentContext: vi.fn().mockResolvedValue({ text: "", count: 0 }),
+    deleteAttachmentsForRecording: vi.fn().mockResolvedValue(undefined),
+}));
+
 import {
     aiEnhancements,
     apiCredentials,

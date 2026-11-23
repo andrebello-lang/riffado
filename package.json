@@ -84,6 +84,7 @@
         "stripe": "^22.3.0",
         "tailwind-merge": "^3.4.0",
         "undici": "^7.28.0",
+        "unpdf": "^2.2.1",
         "zod": "^4.1.12"
     },
     "devDependencies": {

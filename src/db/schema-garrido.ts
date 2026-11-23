@@ -83,3 +83,43 @@ export const libraryRecordingFolders = pgTable(
         ),
     }),
 );
+
+/**
+ * Files attached to a recording (PDF slides, photos of a whiteboard...).
+ * Their extracted text is added as context when the summary is generated.
+ * `filename` and `extractedText` are encrypted at rest; the file itself
+ * lives in the user's storage like the audio.
+ */
+export const recordingAttachments = pgTable(
+    "recording_attachments",
+    {
+        id: text("id")
+            .primaryKey()
+            .$defaultFn(() => nanoid()),
+        userId: text("user_id")
+            .notNull()
+            .references(() => users.id, { onDelete: "cascade" }),
+        recordingId: text("recording_id")
+            .notNull()
+            .references(() => recordings.id, { onDelete: "cascade" }),
+        filename: text("filename").notNull(),
+        mimeType: varchar("mime_type", { length: 100 }).notNull(),
+        sizeBytes: integer("size_bytes").notNull(),
+        storagePath: text("storage_path").notNull(),
+        // 'pending' (waiting for an AI provider), 'done', 'failed'.
+        extractionStatus: varchar("extraction_status", { length: 12 })
+            .notNull()
+            .default("pending"),
+        extractedText: text("extracted_text"),
+        extractionError: text("extraction_error"),
+        pageCount: integer("page_count"),
+        createdAt: timestamp("created_at").notNull().defaultNow(),
+        updatedAt: timestamp("updated_at").notNull().defaultNow(),
+    },
+    (table) => ({
+        recordingIdx: index("recording_attachments_recording_id_idx").on(
+            table.recordingId,
+        ),
+        userIdx: index("recording_attachments_user_id_idx").on(table.userId),
+    }),
+);

@@ -15,6 +15,7 @@ import {
     getSummaryPromptById,
     type SummaryPromptConfiguration,
 } from "@/lib/ai/summary-presets";
+import { buildAttachmentContext } from "@/lib/attachments/server";
 import { decrypt } from "@/lib/encryption";
 import { decryptJsonField, decryptText } from "@/lib/encryption/fields";
 import { AppError, ErrorCode } from "@/lib/errors";
@@ -231,9 +232,10 @@ export async function generateSummaryForRecording(
     // expanded, and (b) `$` sequences in the transcript (e.g. `$1`, `$&`)
     // are inserted verbatim instead of being interpreted as
     // `String.prototype.replace` special patterns.
+    const attachments = await buildAttachmentContext(userId, recordingId);
     const prompt = promptTemplate.replaceAll(
         "{transcription}",
-        () => transcriptText,
+        () => transcriptText + attachments.text,
     );
 
     const baseSystem =

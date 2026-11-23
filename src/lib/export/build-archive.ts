@@ -3,6 +3,7 @@ import { ZipArchive } from "archiver";
 import { and, eq, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { aiEnhancements, recordings, transcriptions } from "@/db/schema";
+import { recordingAttachments } from "@/db/schema-garrido";
 import { decryptJsonField, decryptText } from "@/lib/encryption/fields";
 import { type ExportedFolder, loadLibraryExport } from "@/lib/library/export";
 import type { StorageProvider } from "@/lib/storage/types";
@@ -27,6 +28,14 @@ interface ManifestRecording {
     summary: { included: boolean; path: string | null };
     /** Biblioteca folder ({ id, path }), or null for "Sem pasta". */
     folder: { id: string; path: string } | null;
+    /** Files attached to the recording (PDFs, images) and their read text. */
+    attachments: {
+        filename: string;
+        mimeType: string;
+        path: string | null;
+        textPath: string | null;
+        reason?: string;
+    }[];
 }
 
 function audioExtension(storagePath: string): string {
@@ -116,6 +125,16 @@ export async function buildAndUploadExportArchive(input: {
     );
 
     const library = await loadLibraryExport(userId);
+    const attachmentRows = await db
+        .select()
+        .from(recordingAttachments)
+        .where(eq(recordingAttachments.userId, userId));
+    const attachmentsByRecording = new Map<string, typeof attachmentRows>();
+    for (const a of attachmentRows) {
+        const list = attachmentsByRecording.get(a.recordingId) ?? [];
+        list.push(a);
+        attachmentsByRecording.set(a.recordingId, list);
+    }
 
     const archive = new ZipArchive({ zlib: { level: 6 } });
     const passthrough = new PassThrough();
@@ -181,7 +200,7 @@ export async function buildAndUploadExportArchive(input: {
         library: { folders: ExportedFolder[] };
         recordings: ManifestRecording[];
     } = {
-        version: "2.1",
+        version: "2.2",
         createdAt: new Date().toISOString(),
         userId,
         audioOmittedCount: 0,
@@ -216,6 +235,7 @@ export async function buildAndUploadExportArchive(input: {
             transcript: { included: false, path: null },
             summary: { included: false, path: null },
             folder: library.folderOf(recording.id),
+            attachments: [],
         };
 
         let audioExists = false;
@@ -326,6 +346,38 @@ export async function buildAndUploadExportArchive(input: {
                 { name: summaryPath },
             );
             entry.summary = { included: true, path: summaryPath };
+        }
+
+        for (const [index, a] of (
+            attachmentsByRecording.get(recording.id) ?? []
+        ).entries()) {
+            onProgress?.();
+            const name = decryptText(a.filename).replace(/[/\\]/g, "_");
+            const base = `${folder}/anexos/${String(index + 1).padStart(2, "0")}-${name}`;
+            const item: ManifestRecording["attachments"][number] = {
+                filename: name,
+                mimeType: a.mimeType,
+                path: null,
+                textPath: null,
+            };
+            try {
+                archive.append(await storage.downloadFile(a.storagePath), {
+                    name: base,
+                    store: true,
+                });
+                item.path = base;
+            } catch (error) {
+                item.reason =
+                    error instanceof Error ? error.message : String(error);
+            }
+            if (a.extractedText) {
+                item.textPath = `${base}.txt`;
+                archive.append(
+                    Buffer.from(decryptText(a.extractedText), "utf-8"),
+                    { name: item.textPath },
+                );
+            }
+            entry.attachments.push(item);
         }
 
         manifest.recordings.push(entry);

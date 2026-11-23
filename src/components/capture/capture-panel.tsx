@@ -2,6 +2,10 @@
 
 import { Languages, Loader2, RefreshCw, Sparkles, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+    AttachmentsTab,
+    useAttachments,
+} from "@/components/capture/attachments-tab";
 import { TranscribeInBrowserButton } from "@/components/dashboard/transcribe-in-browser-button";
 import {
     RichMarkdown,
@@ -32,7 +36,7 @@ interface CapturePanelProps {
     onTranscribeComplete?: () => void;
 }
 
-type Tab = "essencia" | "transcricao";
+type Tab = "essencia" | "transcricao" | "anexos";
 
 const HIGHLIGHT =
     "bg-[linear-gradient(transparent_55%,var(--highlight-mark)_55%)] box-decoration-clone";
@@ -106,6 +110,14 @@ export function CapturePanel({
         transcriptionText: text,
     });
     const { done, toggle } = useTaskChecks(recording.id);
+    const attachments = useAttachments(recording.id);
+    const readyAttachments = attachments.items.filter(
+        (a) => a.extractionStatus === "done",
+    ).length;
+    const contextNote =
+        readyAttachments > 0
+            ? ` ${readyAttachments === 1 ? "O anexo entra" : `Os ${readyAttachments} anexos entram`} como contexto.`
+            : "";
 
     const ideas = summaryData?.keyPoints ?? [];
     const tasks = summaryData?.actionItems ?? [];
@@ -155,6 +167,12 @@ export function CapturePanel({
                     [
                         ["essencia", "Essência"],
                         ["transcricao", "Transcrição"],
+                        [
+                            "anexos",
+                            attachments.items.length
+                                ? `Anexos · ${attachments.items.length}`
+                                : "Anexos",
+                        ],
                     ] as const
                 ).map(([id, label]) => (
                     <button
@@ -175,7 +193,9 @@ export function CapturePanel({
                 ))}
             </div>
 
-            {tab === "essencia" ? (
+            {tab === "anexos" ? (
+                <AttachmentsTab attachments={attachments} />
+            ) : tab === "essencia" ? (
                 isTranscribing ? (
                     <Pending label="Transcrevendo o áudio…" />
                 ) : !text ? (
@@ -190,7 +210,7 @@ export function CapturePanel({
                 ) : !summaryData?.summary && ideas.length === 0 ? (
                     <EmptyCard
                         title="Pronto para extrair a essência"
-                        body="A IA lê a transcrição e devolve as melhores ideias, as tarefas e um resumo."
+                        body={`A IA lê a transcrição e devolve as melhores ideias, as tarefas e um resumo.${contextNote}`}
                     >
                         <div className="flex flex-wrap items-center gap-2">
                             {presetSelect}
@@ -304,6 +324,15 @@ export function CapturePanel({
                                 {summaryData?.model && (
                                     <span className="rounded bg-muted px-2 py-0.5 font-mono">
                                         {summaryData.model}
+                                    </span>
+                                )}
+                                {readyAttachments > 0 && (
+                                    <span>
+                                        Extrair de novo usa{" "}
+                                        {readyAttachments === 1
+                                            ? "1 anexo"
+                                            : `${readyAttachments} anexos`}{" "}
+                                        como contexto
                                     </span>
                                 )}
                             </div>
