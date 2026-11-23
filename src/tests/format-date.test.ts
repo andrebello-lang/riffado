@@ -6,7 +6,7 @@ describe("formatRecordingDateTimeRange", () => {
         const start = new Date(2026, 8, 7, 11, 27);
 
         expect(formatRecordingDateTimeRange(start, 25 * 60 * 1000)).toBe(
-            "Sep 7, 2026 · 11:27 AM–11:52 AM",
+            "7 de set de 2026 · 11:27–11:52",
         );
     });
 
@@ -14,7 +14,7 @@ describe("formatRecordingDateTimeRange", () => {
         const start = new Date(2026, 8, 7, 23, 50);
 
         expect(formatRecordingDateTimeRange(start, 20 * 60 * 1000)).toBe(
-            "Sep 7, 2026 · 11:50 PM–Sep 8, 2026 · 12:10 AM",
+            "7 de set de 2026 · 23:50–8 de set de 2026 · 00:10",
         );
     });
 });

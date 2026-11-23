@@ -24,11 +24,11 @@ export default function ErrorBoundary({
 
     return (
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-4 text-center">
-            <h2 className="text-lg font-medium">Something went wrong</h2>
+            <h2 className="text-lg font-medium">Algo deu errado</h2>
             <p className="text-sm text-muted-foreground">
-                Try again, or reload the page if it keeps happening.
+                Tente de novo ou recarregue a página se continuar acontecendo.
             </p>
-            <MetalButton onClick={() => reset()}>Try again</MetalButton>
+            <MetalButton onClick={() => reset()}>Tentar de novo</MetalButton>
         </div>
     );
 }

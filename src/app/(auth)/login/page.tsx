@@ -27,10 +27,7 @@ export default async function LoginPage() {
     }
 
     return (
-        <SelfHostAuthChrome
-            title="Entrar"
-            subtitle="Seu segundo cérebro para reuniões, aulas e ideias."
-        >
+        <SelfHostAuthChrome title="Entrar" subtitle="Bem-vindo de volta.">
             <LoginForm {...formProps} />
         </SelfHostAuthChrome>
     );

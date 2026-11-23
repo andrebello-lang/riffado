@@ -97,14 +97,17 @@ export function TranscriptionModelPicker({
                 if (!res.ok) {
                     setAudioModels([]);
                     setAudioModelsError(
-                        data?.error || "Couldn't load audio models.",
+                        data?.error ||
+                            "Não foi possível carregar os modelos de áudio.",
                     );
                     return;
                 }
                 setAudioModels(data?.models ?? []);
             } catch {
                 if (reqId !== requestId.current) return;
-                setAudioModelsError("Couldn't load audio models.");
+                setAudioModelsError(
+                    "Não foi possível carregar os modelos de áudio.",
+                );
             } finally {
                 if (reqId === requestId.current) {
                     setAudioModelsLoading(false);
@@ -164,7 +167,7 @@ export function TranscriptionModelPicker({
     let helper: string | null = null;
     if (preset?.fetchAudioModels) {
         if (audioModelsLoading) {
-            helper = "Loading audio-capable models…";
+            helper = "Carregando os modelos de áudio…";
         } else if (audioModelsError) {
             helper = audioModelsError;
         } else if (hasOptions) {

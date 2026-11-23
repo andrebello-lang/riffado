@@ -20,6 +20,7 @@ import {
     useLibrary,
 } from "@/components/library/library-context";
 import { LibraryPanel } from "@/components/library/library-panel";
+import { LibraryViewTitle } from "@/components/library/library-view-title";
 import { OnboardingDialog } from "@/components/onboarding-dialog";
 import { SettingsDialog } from "@/components/settings-dialog";
 import { useAutoSync } from "@/hooks/use-auto-sync";
@@ -251,10 +252,10 @@ function WorkstationInner({
             if (initialSettings.syncNotifications !== false) {
                 if (newRecordings > 0) {
                     toast.success(
-                        `Synced ${newRecordings} new recording${newRecordings !== 1 ? "s" : ""}`,
+                        `${newRecordings} ${newRecordings !== 1 ? "novas capturas sincronizadas" : "nova captura sincronizada"}`,
                     );
                 } else {
-                    toast.success("Sync complete - no new recordings");
+                    toast.success("Sincronizado: nenhuma captura nova");
                 }
             }
             if (initialSettings.browserNotifications) {
@@ -359,7 +360,7 @@ function WorkstationInner({
                 if (posthog.__loaded) {
                     posthog.capture("recording_deleted");
                 }
-                toast.success("Recording deleted");
+                toast.success("Captura excluída");
                 refresh();
             } catch (err) {
                 // Rollback
@@ -402,7 +403,7 @@ function WorkstationInner({
     return (
         <>
             <div className="bg-background">
-                <div className="container mx-auto max-w-7xl px-4 py-6">
+                <div className="mx-auto max-w-[1600px] px-4 py-6">
                     <TrialBanner isHosted={isHosted} />
                     <WorkstationHeader
                         isAdmin={isAdmin}
@@ -437,7 +438,10 @@ function WorkstationInner({
                             onUpload={triggerUpload}
                         />
                     ) : (
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-[300px_minmax(0,1fr)] xl:grid-cols-[250px_340px_minmax(0,1fr)]">
+                            <aside className="hidden xl:block xl:sticky xl:top-[4.5rem] xl:max-h-[calc(100vh-5rem)] xl:self-start xl:overflow-y-auto">
+                                <LibraryPanel variant="sidebar" />
+                            </aside>
                             {/*
                               Mobile master/detail: on <lg, only one
                               pane renders at a time. `mobileView ===
@@ -450,11 +454,14 @@ function WorkstationInner({
                             */}
                             <div
                                 className={cn(
-                                    "lg:col-span-1 lg:block",
+                                    "min-w-0 lg:block",
                                     mobileView === "detail" && "hidden",
                                 )}
                             >
-                                <LibraryPanel />
+                                <div className="xl:hidden">
+                                    <LibraryPanel />
+                                </div>
+                                <LibraryViewTitle />
                                 <RecordingList
                                     ref={listRef}
                                     recordings={visibleRecordings}

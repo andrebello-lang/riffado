@@ -438,7 +438,7 @@ describe("useTranscriptionSummary (#283)", () => {
         });
         expect(hook.result.current.isSummarizing).toBe(false);
         expect(hook.result.current.summaryData?.summary).toBe("from B");
-        expect(toast.success).toHaveBeenCalledWith("Summary generated");
+        expect(toast.success).toHaveBeenCalledWith("Resumo gerado");
         expect(toast.error).not.toHaveBeenCalled();
         expect(toast.warning).not.toHaveBeenCalled();
     });
@@ -493,7 +493,7 @@ describe("useTranscriptionSummary (#283)", () => {
             await summarize;
         });
         expect(hook.result.current.summaryData?.summary).toBe("generated");
-        expect(toast.success).toHaveBeenCalledWith("Summary generated");
+        expect(toast.success).toHaveBeenCalledWith("Resumo gerado");
         expect(toast.error).not.toHaveBeenCalled();
         expect(toast.warning).not.toHaveBeenCalled();
 
@@ -624,7 +624,7 @@ describe("useTranscriptionSummary (#283)", () => {
             await summarize;
         });
         expect(hook.result.current.summaryData?.summary).toBe("from A");
-        expect(toast.success).toHaveBeenCalledWith("Summary generated");
+        expect(toast.success).toHaveBeenCalledWith("Resumo gerado");
 
         takePending("GET", "rec-a").resolve(
             jsonResponse(summaryBody("stale GET after return")),
@@ -721,7 +721,7 @@ describe("useTranscriptionSummary (#283)", () => {
             await deleted;
         });
 
-        expect(toast.success).toHaveBeenCalledWith("Summary deleted");
+        expect(toast.success).toHaveBeenCalledWith("Resumo excluído");
         expect(toast.error).not.toHaveBeenCalled();
     });
 
@@ -765,6 +765,6 @@ describe("useTranscriptionSummary (#283)", () => {
         expect(hook.result.current.summaryData?.summary).toBe("from A");
         expect(hook.result.current.isSummarizing).toBe(false);
         expect(toast.success).toHaveBeenCalledTimes(1);
-        expect(toast.success).toHaveBeenCalledWith("Summary generated");
+        expect(toast.success).toHaveBeenCalledWith("Resumo gerado");
     });
 });

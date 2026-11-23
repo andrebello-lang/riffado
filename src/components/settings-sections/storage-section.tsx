@@ -190,7 +190,9 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
                 if (typeof prev === "number" || prev === null)
                     setRetentionDays(prev);
             }
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -205,8 +207,8 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Storage"
-                description="Where Riffado keeps the audio files behind your recordings."
+                title="Armazenamento"
+                description="Onde o Brieffado guarda os áudios das suas capturas."
                 icon={HardDrive}
             />
 
@@ -230,7 +232,8 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
                 />
             ) : (
                 <div className="rounded-lg border border-dashed bg-muted/20 px-4 py-6 text-center text-sm text-muted-foreground">
-                    Couldn't load storage usage. Refresh to try again.
+                    Não foi possível carregar o uso do armazenamento. Atualize a
+                    página.
                 </div>
             )}
 
@@ -250,21 +253,21 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
             {!isHosted && (
                 <div className="rounded-lg border bg-card/40 px-4 py-3 space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Backend</span>
+                        <span className="text-muted-foreground">Onde fica</span>
                         <span className="font-medium capitalize">
                             {usage?.storageType ?? "local"}
                         </span>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        Storage backend is configured at the instance level via
-                        environment variables.
+                        O local de armazenamento é definido nas variáveis de
+                        ambiente do servidor.
                     </p>
                 </div>
             )}
 
             <SettingsCard
-                title="Auto-delete old recordings"
-                description="Automatically delete recordings older than the retention period."
+                title="Apagar capturas antigas"
+                description="Apaga automaticamente as capturas mais antigas que o prazo."
                 action={
                     <Switch
                         id="auto-delete"
@@ -289,9 +292,7 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
             >
                 {autoDeleteRecordings && (
                     <div className="space-y-2">
-                        <Label htmlFor="retention-days">
-                            Retention period (days)
-                        </Label>
+                        <Label htmlFor="retention-days">Prazo (dias)</Label>
                         <Input
                             id="retention-days"
                             type="number"
@@ -343,8 +344,8 @@ export function StorageSection({ isHosted = false }: StorageSectionProps) {
                             placeholder="30"
                         />
                         <p className="text-xs text-muted-foreground">
-                            Recordings older than this will be automatically
-                            deleted (1-365 days)
+                            Capturas mais antigas que isso são apagadas
+                            automaticamente (1 a 365 dias)
                         </p>
                     </div>
                 )}

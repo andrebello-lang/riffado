@@ -94,14 +94,14 @@ export function RecordingWorkstation({
             );
 
             if (response.ok) {
-                toast.success("Transcription complete");
+                toast.success("Transcrição concluída");
                 refresh();
             } else {
                 const error = await response.json();
-                toast.error(error.error || "Transcription failed");
+                toast.error(error.error || "Falha na transcrição");
             }
         } catch {
-            toast.error("Failed to transcribe recording");
+            toast.error("Não foi possível transcrever a captura");
         } finally {
             setIsTranscribing(false);
         }
@@ -115,17 +115,19 @@ export function RecordingWorkstation({
             });
 
             if (response.ok) {
-                toast.success("Recording deleted");
+                toast.success("Captura excluída");
                 setDeleteDialogOpen(false);
                 push("/dashboard");
                 refresh();
             } else {
                 const error = await response.json().catch(() => ({}));
-                toast.error(error.error || "Failed to delete recording");
+                toast.error(
+                    error.error || "Não foi possível excluir a captura",
+                );
                 setIsDeleting(false);
             }
         } catch {
-            toast.error("Failed to delete recording");
+            toast.error("Não foi possível excluir a captura");
             setIsDeleting(false);
         }
     }, [recording.id, refresh, push]);
@@ -160,8 +162,8 @@ export function RecordingWorkstation({
                         onClick={() => setDeleteDialogOpen(true)}
                         variant="outline"
                         size="icon"
-                        aria-label="Delete recording"
-                        title="Delete recording"
+                        aria-label="Excluir captura"
+                        title="Excluir captura"
                     >
                         <Trash2 className="size-4" />
                     </Button>
@@ -189,13 +191,13 @@ export function RecordingWorkstation({
                     {/* Metadata */}
                     <Card>
                         <CardHeader>
-                            <CardTitle>Details</CardTitle>
+                            <CardTitle>Detalhes</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                                 <div>
                                     <div className="text-muted-foreground text-xs mb-1">
-                                        Duration
+                                        Duração
                                     </div>
                                     <div className="font-medium">
                                         {Math.floor(recording.duration / 60000)}
@@ -207,7 +209,7 @@ export function RecordingWorkstation({
                                 </div>
                                 <div>
                                     <div className="text-muted-foreground text-xs mb-1">
-                                        File Size
+                                        Tamanho
                                     </div>
                                     <div className="font-medium">
                                         {(
@@ -219,7 +221,7 @@ export function RecordingWorkstation({
                                 </div>
                                 <div>
                                     <div className="text-muted-foreground text-xs mb-1">
-                                        Device
+                                        Dispositivo
                                     </div>
                                     <div className="font-mono text-xs truncate">
                                         {recording.deviceSn}
@@ -227,7 +229,7 @@ export function RecordingWorkstation({
                                 </div>
                                 <div>
                                     <div className="text-muted-foreground text-xs mb-1">
-                                        Date
+                                        Data
                                     </div>
                                     <div className="font-medium">
                                         <LocalTime
@@ -250,12 +252,11 @@ export function RecordingWorkstation({
             >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Delete this recording?</DialogTitle>
+                        <DialogTitle>Excluir esta captura?</DialogTitle>
                         <DialogDescription>
-                            This permanently removes the audio file,
-                            transcription, and AI summary from Riffado. The
-                            recording on your Plaud account is not affected, but
-                            it will not be re-synced to Riffado.
+                            Apaga de vez o áudio, a transcrição e o resumo do
+                            Brieffado. A gravação na sua conta do Plaud não é
+                            afetada, mas não volta a ser sincronizada.
                         </DialogDescription>
                     </DialogHeader>
                     <DialogFooter>
@@ -264,7 +265,7 @@ export function RecordingWorkstation({
                             onClick={() => setDeleteDialogOpen(false)}
                             disabled={isDeleting}
                         >
-                            Cancel
+                            Cancelar
                         </Button>
                         <Button
                             variant="destructive"
@@ -274,10 +275,10 @@ export function RecordingWorkstation({
                             {isDeleting ? (
                                 <>
                                     <Loader2 className="size-4 mr-2 animate-spin" />
-                                    Deleting…
+                                    Excluindo…
                                 </>
                             ) : (
-                                "Delete recording"
+                                "Excluir captura"
                             )}
                         </Button>
                     </DialogFooter>

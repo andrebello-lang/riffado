@@ -40,7 +40,7 @@ export function WebhookDeliveriesDialog({ webhook, onClose }: Props) {
             };
             setDeliveries(data.deliveries);
         } catch {
-            toast.error("Failed to load deliveries");
+            toast.error("Não foi possível carregar os envios");
         }
     }, [webhookId]);
 
@@ -62,10 +62,10 @@ export function WebhookDeliveriesDialog({ webhook, onClose }: Props) {
                 { method: "POST" },
             );
             if (!response.ok) throw new Error("Failed to redeliver");
-            toast.success("Delivery queued");
+            toast.success("Envio agendado");
             await refresh();
         } catch {
-            toast.error("Failed to queue delivery");
+            toast.error("Não foi possível agendar o envio");
         }
     };
 
@@ -77,11 +77,11 @@ export function WebhookDeliveriesDialog({ webhook, onClose }: Props) {
             }}
         >
             <DialogContent className="max-w-3xl">
-                <DialogTitle>Webhook Deliveries</DialogTitle>
+                <DialogTitle>Envios do webhook</DialogTitle>
                 <div className="max-h-[420px] space-y-2 overflow-y-auto">
                     {deliveries.length === 0 ? (
                         <p className="py-8 text-center text-sm text-muted-foreground">
-                            No deliveries yet
+                            Nenhum envio ainda
                         </p>
                     ) : (
                         deliveries.map((delivery) => (
@@ -123,7 +123,7 @@ export function WebhookDeliveriesDialog({ webhook, onClose }: Props) {
                                     onClick={() => redeliver(delivery.id)}
                                 >
                                     <RotateCcw className="size-4" />
-                                    Redeliver
+                                    Reenviar
                                 </Button>
                             </div>
                         ))

@@ -114,7 +114,9 @@ export function WebhookEditorDialog({
                 error?: string;
             };
             if (!response.ok || !data.webhook) {
-                throw new Error(data.error || "Failed to save webhook");
+                throw new Error(
+                    data.error || "Não foi possível salvar o webhook",
+                );
             }
 
             await onSaved();
@@ -125,12 +127,14 @@ export function WebhookEditorDialog({
             } else {
                 onOpenChange(false);
             }
-            toast.success(editingWebhook ? "Webhook updated" : "Webhook added");
+            toast.success(
+                editingWebhook ? "Webhook atualizado" : "Webhook adicionado",
+            );
         } catch (error) {
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to save webhook",
+                    : "Não foi possível salvar o webhook",
             );
         } finally {
             setIsSaving(false);
@@ -140,19 +144,19 @@ export function WebhookEditorDialog({
     const copySecret = async () => {
         if (!createdSecret) return;
         await navigator.clipboard.writeText(createdSecret);
-        toast.success("Secret copied");
+        toast.success("Segredo copiado");
     };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-xl">
                 <DialogTitle>
-                    {editingWebhook ? "Edit Webhook" : "Add Webhook"}
+                    {editingWebhook ? "Editar webhook" : "Adicionar webhook"}
                 </DialogTitle>
                 {createdSecret ? (
                     <div className="space-y-4">
                         <DialogDescription>
-                            This signing secret is shown once.
+                            Este segredo de assinatura aparece só uma vez.
                         </DialogDescription>
                         <div className="rounded-md border bg-muted p-3 font-mono text-sm break-all">
                             {createdSecret}
@@ -165,7 +169,7 @@ export function WebhookEditorDialog({
                                 onClick={copySecret}
                             >
                                 <Clipboard className="size-4" />
-                                Copy
+                                Copiar
                             </Button>
                             <Button
                                 type="button"
@@ -176,7 +180,7 @@ export function WebhookEditorDialog({
                                 }}
                             >
                                 <Check className="size-4" />
-                                Saved
+                                Guardei
                             </Button>
                         </div>
                     </div>
@@ -199,7 +203,7 @@ export function WebhookEditorDialog({
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="webhook-description">
-                                Description
+                                Descrição
                             </Label>
                             <Input
                                 id="webhook-description"
@@ -210,12 +214,12 @@ export function WebhookEditorDialog({
                                         description: event.target.value,
                                     }))
                                 }
-                                placeholder="Automation receiver"
+                                placeholder="Ex.: n8n"
                                 disabled={isSaving}
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Events</Label>
+                            <Label>Eventos</Label>
                             <div className="grid gap-2 sm:grid-cols-2">
                                 {events.map((event) => (
                                     <label
@@ -240,7 +244,7 @@ export function WebhookEditorDialog({
                             </div>
                         </div>
                         <div className="flex items-center justify-between rounded-md border p-3">
-                            <Label htmlFor="webhook-enabled">Enabled</Label>
+                            <Label htmlFor="webhook-enabled">Ativo</Label>
                             <Switch
                                 id="webhook-enabled"
                                 checked={form.enabled}
@@ -260,7 +264,7 @@ export function WebhookEditorDialog({
                                 onClick={() => onOpenChange(false)}
                                 disabled={isSaving}
                             >
-                                Cancel
+                                Cancelar
                             </Button>
                             <Button
                                 type="submit"
@@ -270,7 +274,7 @@ export function WebhookEditorDialog({
                                     form.events.length === 0
                                 }
                             >
-                                Save
+                                Salvar
                             </Button>
                         </div>
                     </form>

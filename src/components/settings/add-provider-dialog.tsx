@@ -69,7 +69,7 @@ export function AddProviderDialog({
         e.preventDefault();
 
         if (!provider || !apiKey) {
-            toast.error("Provider and API key are required");
+            toast.error("Provedor e chave de API são obrigatórios");
             return;
         }
 
@@ -90,10 +90,12 @@ export function AddProviderDialog({
 
             if (!response.ok) {
                 const data = await response.json().catch(() => null);
-                throw new Error(data?.error || "Failed to add provider");
+                throw new Error(
+                    data?.error || "Não foi possível adicionar o provedor",
+                );
             }
 
-            toast.success("AI provider added successfully");
+            toast.success("Provedor de IA adicionado");
             onSuccess();
             onOpenChange(false);
 
@@ -107,7 +109,7 @@ export function AddProviderDialog({
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to add AI provider",
+                    : "Não foi possível adicionar o provedor de IA",
             );
         } finally {
             setIsLoading(false);
@@ -120,18 +122,18 @@ export function AddProviderDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Add AI Provider</DialogTitle>
+                    <DialogTitle>Adicionar provedor de IA</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label>Provider</Label>
+                        <Label>Provedor</Label>
                         <Select
                             value={provider}
                             onValueChange={handleProviderChange}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a provider" />
+                                <SelectValue placeholder="Escolha um provedor" />
                             </SelectTrigger>
                             <SelectContent>
                                 {visiblePresets.map((preset) => (
@@ -147,12 +149,13 @@ export function AddProviderDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="apiKey">API Key</Label>
+                        <Label htmlFor="apiKey">Chave de API</Label>
                         <Input
                             id="apiKey"
                             type="password"
                             placeholder={
-                                selectedPreset?.placeholder || "Your API key"
+                                selectedPreset?.placeholder ||
+                                "Sua chave de API"
                             }
                             value={apiKey}
                             onChange={(e) => setApiKey(e.target.value)}
@@ -162,7 +165,7 @@ export function AddProviderDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="baseUrl">Base URL (Optional)</Label>
+                        <Label htmlFor="baseUrl">URL base (opcional)</Label>
                         <Input
                             id="baseUrl"
                             type="text"
@@ -205,7 +208,7 @@ export function AddProviderDialog({
                                 }
                                 disabled={isLoading}
                             />
-                            <span>Use for transcription</span>
+                            <span>Usar para transcrição</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -218,7 +221,7 @@ export function AddProviderDialog({
                                     isLoading || !supportsEnhancement(provider)
                                 }
                             />
-                            <span>Use for AI enhancements</span>
+                            <span>Usar para resumos e títulos</span>
                         </label>
                         {provider && !supportsEnhancement(provider) && (
                             <p className="text-xs text-muted-foreground pl-6">
@@ -234,7 +237,7 @@ export function AddProviderDialog({
                             disabled={isLoading}
                             className="flex-1"
                         >
-                            Cancel
+                            Cancelar
                         </MetalButton>
                         <MetalButton
                             type="submit"
@@ -242,7 +245,9 @@ export function AddProviderDialog({
                             disabled={isLoading}
                             className="flex-1"
                         >
-                            {isLoading ? "Adding..." : "Add Provider"}
+                            {isLoading
+                                ? "Adicionando..."
+                                : "Adicionar provedor"}
                         </MetalButton>
                     </div>
                 </form>

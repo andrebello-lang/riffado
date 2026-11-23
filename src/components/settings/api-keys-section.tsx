@@ -48,14 +48,14 @@ export function ApiKeysSection() {
                 throw new Error(
                     await getApiErrorMessage(
                         response,
-                        "Failed to fetch API keys",
+                        "Não foi possível carregar as chaves de API",
                     ),
                 );
             }
             const data = (await response.json()) as { apiKeys: ApiKey[] };
             setApiKeys(data.apiKeys);
         } catch {
-            toast.error("Failed to load API keys");
+            toast.error("Não foi possível carregar as chaves de API");
         } finally {
             setIsLoading(false);
         }
@@ -86,7 +86,7 @@ export function ApiKeysSection() {
                 throw new Error(
                     await getApiErrorMessage(
                         response,
-                        "Failed to create API key",
+                        "Não foi possível criar a chave de API",
                     ),
                 );
             }
@@ -96,7 +96,9 @@ export function ApiKeysSection() {
                 error?: string;
             };
             if (!data.key || !data.apiKey) {
-                throw new Error(data.error || "Failed to create API key");
+                throw new Error(
+                    data.error || "Não foi possível criar a chave de API",
+                );
             }
 
             setApiKeys((current) => [data.apiKey as ApiKey, ...current]);
@@ -107,7 +109,7 @@ export function ApiKeysSection() {
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to create API key",
+                    : "Não foi possível criar a chave de API",
             );
         } finally {
             setIsCreating(false);
@@ -123,17 +125,17 @@ export function ApiKeysSection() {
                 throw new Error(
                     await getApiErrorMessage(
                         response,
-                        "Failed to revoke API key",
+                        "Não foi possível revogar a chave de API",
                     ),
                 );
             }
-            toast.success("API key revoked");
+            toast.success("Chave de API revogada");
             await refreshApiKeys();
         } catch (error) {
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to revoke API key",
+                    : "Não foi possível revogar a chave de API",
             );
         }
     };
@@ -141,14 +143,14 @@ export function ApiKeysSection() {
     const copyCreatedKey = async () => {
         if (!createdKey) return;
         await navigator.clipboard.writeText(createdKey);
-        toast.success("API key copied");
+        toast.success("Chave de API copiada");
     };
 
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="API Keys"
-                description="Personal access tokens for the Riffado public API."
+                title="Chaves de API"
+                description="Chaves pessoais para a API do Brieffado (n8n, automações)."
                 icon={KeyRound}
                 action={
                     <Button
@@ -159,7 +161,7 @@ export function ApiKeysSection() {
                         }}
                     >
                         <Plus className="size-4" />
-                        Create Key
+                        Criar chave
                     </Button>
                 }
             />
@@ -171,10 +173,10 @@ export function ApiKeysSection() {
             ) : apiKeys.length === 0 ? (
                 <div className="text-center py-12 border rounded-lg">
                     <KeyRound className="size-12 mx-auto mb-3 text-muted-foreground" />
-                    <h3 className="font-semibold mb-2">No API keys</h3>
+                    <h3 className="font-semibold mb-2">Nenhuma chave de API</h3>
                     <Button size="sm" onClick={() => setIsCreateOpen(true)}>
                         <Plus className="size-4" />
-                        Create Key
+                        Criar chave
                     </Button>
                 </div>
             ) : (
@@ -194,7 +196,7 @@ export function ApiKeysSection() {
                                     </span>
                                     {apiKey.revokedAt && (
                                         <span className="rounded border border-destructive/30 bg-destructive/10 px-2 py-0.5 text-xs text-destructive">
-                                            Revoked
+                                            Revogada
                                         </span>
                                     )}
                                 </div>
@@ -216,7 +218,7 @@ export function ApiKeysSection() {
                                 size="icon"
                                 onClick={() => handleRevoke(apiKey.id)}
                                 disabled={Boolean(apiKey.revokedAt)}
-                                aria-label={`Revoke ${apiKey.name}`}
+                                aria-label={`Revogar ${apiKey.name}`}
                             >
                                 <Trash2 className="size-4 text-destructive" />
                             </Button>
@@ -227,11 +229,11 @@ export function ApiKeysSection() {
 
             <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
                 <DialogContent className="max-w-md">
-                    <DialogTitle>Create API Key</DialogTitle>
+                    <DialogTitle>Criar chave de API</DialogTitle>
                     {createdKey ? (
                         <div className="space-y-4">
                             <DialogDescription>
-                                This key is shown once.
+                                Esta chave aparece só uma vez.
                             </DialogDescription>
                             <div className="rounded-md border bg-muted p-3 font-mono text-sm break-all">
                                 {createdKey}
@@ -244,7 +246,7 @@ export function ApiKeysSection() {
                                     onClick={copyCreatedKey}
                                 >
                                     <Clipboard className="size-4" />
-                                    Copy
+                                    Copiar
                                 </Button>
                                 <Button
                                     type="button"
@@ -255,27 +257,27 @@ export function ApiKeysSection() {
                                     }}
                                 >
                                     <Check className="size-4" />
-                                    Saved
+                                    Guardei
                                 </Button>
                             </div>
                         </div>
                     ) : (
                         <form onSubmit={handleCreate} className="space-y-4">
                             <div className="space-y-2">
-                                <Label htmlFor="api-key-name">Name</Label>
+                                <Label htmlFor="api-key-name">Nome</Label>
                                 <Input
                                     id="api-key-name"
                                     value={name}
                                     onChange={(event) =>
                                         setName(event.target.value)
                                     }
-                                    placeholder="Hermes Agent"
+                                    placeholder="n8n"
                                     disabled={isCreating}
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="api-key-expires">
-                                    Expiration
+                                    Validade
                                 </Label>
                                 <Input
                                     id="api-key-expires"
@@ -294,13 +296,13 @@ export function ApiKeysSection() {
                                     onClick={() => setIsCreateOpen(false)}
                                     disabled={isCreating}
                                 >
-                                    Cancel
+                                    Cancelar
                                 </Button>
                                 <Button
                                     type="submit"
                                     disabled={!name.trim() || isCreating}
                                 >
-                                    Create
+                                    Criar
                                 </Button>
                             </div>
                         </form>

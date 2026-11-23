@@ -42,12 +42,12 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            toast.error("Passwords do not match");
+            toast.error("As senhas não são iguais");
             return;
         }
 
         if (password.length < 8) {
-            toast.error("Password must be at least 8 characters");
+            toast.error("A senha precisa ter pelo menos 8 caracteres");
             return;
         }
 
@@ -67,7 +67,9 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
             });
 
             if (result.error) {
-                toast.error(result.error.message || "Failed to create account");
+                toast.error(
+                    result.error.message || "Não foi possível criar a conta",
+                );
                 return;
             }
 
@@ -83,14 +85,14 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                 posthog.capture("user_signed_up");
             }
 
-            toast.success("Account created successfully");
+            toast.success("Conta criada");
             push("/dashboard");
             refresh();
         } catch (error) {
             const message =
                 error instanceof Error
                     ? error.message
-                    : "Failed to create account";
+                    : "Não foi possível criar a conta";
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -103,7 +105,7 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
             const secs = Math.ceil(
                 (RESEND_COOLDOWN_MS - (now - lastResentAt)) / 1000,
             );
-            toast.error(`Please wait ${secs}s before resending`);
+            toast.error(`Aguarde ${secs} s para reenviar`);
             return;
         }
 
@@ -117,18 +119,18 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
             if (result.error) {
                 toast.error(
                     result.error.message ||
-                        "Failed to resend verification email",
+                        "Não foi possível reenviar o e-mail de confirmação",
                 );
                 return;
             }
 
             setLastResentAt(Date.now());
-            toast.success("Verification email resent");
+            toast.success("E-mail de confirmação reenviado");
         } catch (error) {
             const message =
                 error instanceof Error
                     ? error.message
-                    : "Failed to resend verification email";
+                    : "Não foi possível reenviar o e-mail de confirmação";
             toast.error(message);
         } finally {
             setIsResending(false);
@@ -139,12 +141,12 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
         <div className="space-y-6">
             {awaitingVerification ? (
                 <div className="space-y-3 rounded-md border border-border bg-muted/40 p-4 text-sm">
-                    <p className="font-medium">Check your email.</p>
+                    <p className="font-medium">Confira seu e-mail.</p>
                     <p className="text-muted-foreground">
-                        We sent a verification link to{" "}
+                        Enviamos um link de confirmação para{" "}
                         <span className="font-mono text-xs">{email}</span>.
-                        Click the link to activate your account -- you won't be
-                        able to sign in until it's verified.
+                        Clique no link para ativar a conta. Você só consegue
+                        entrar depois da confirmação.
                     </p>
                     <button
                         type="button"
@@ -152,17 +154,17 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                         disabled={isResending}
                         className="text-accent-cyan hover:underline disabled:opacity-50"
                     >
-                        {isResending ? "Resending..." : "Resend email"}
+                        {isResending ? "Reenviando..." : "Reenviar e-mail"}
                     </button>
                 </div>
             ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
+                        <Label htmlFor="name">Nome</Label>
                         <Input
                             id="name"
                             type="text"
-                            placeholder="John Doe"
+                            placeholder="Seu nome"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             required
@@ -172,11 +174,11 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">E-mail</Label>
                         <Input
                             id="email"
                             type="email"
-                            placeholder="you@example.com"
+                            placeholder="voce@exemplo.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -186,7 +188,7 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Senha</Label>
                         <Input
                             id="password"
                             type="password"
@@ -201,9 +203,7 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="confirmPassword">
-                            Confirm Password
-                        </Label>
+                        <Label htmlFor="confirmPassword">Confirmar senha</Label>
                         <Input
                             id="confirmPassword"
                             type="password"
@@ -222,20 +222,18 @@ export function RegisterForm({ requireEmailVerification }: RegisterFormProps) {
                         variant="cyan"
                         disabled={isLoading}
                     >
-                        {isLoading ? "Creating account..." : "Create Account"}
+                        {isLoading ? "Criando a conta..." : "Criar conta"}
                     </MetalButton>
                 </form>
             )}
 
             <div className="text-center text-sm">
-                <span className="text-muted-foreground">
-                    Already have an account?{" "}
-                </span>
+                <span className="text-muted-foreground">Já tem conta? </span>
                 <Link
                     href="/login"
                     className="text-accent-cyan hover:underline"
                 >
-                    Sign in
+                    Entrar
                 </Link>
             </div>
         </div>

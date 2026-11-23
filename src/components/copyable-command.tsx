@@ -70,18 +70,18 @@ export function CopyableCommand({
                 <button
                     type="button"
                     onClick={handleCopy}
-                    aria-label={ariaLabel ?? "Copy command"}
+                    aria-label={ariaLabel ?? "Copiar comando"}
                     className="shrink-0 inline-flex items-center gap-1.5 rounded-md border border-zinc-800 bg-zinc-900 px-2.5 py-1.5 text-xs text-zinc-400 hover:text-zinc-100 hover:border-zinc-700 transition-colors"
                 >
                     {copied ? (
                         <>
                             <Check className="size-3.5 text-green-400" />
-                            <span>Copied</span>
+                            <span>Copiado</span>
                         </>
                     ) : (
                         <>
                             <Copy className="size-3.5" />
-                            <span>Copy</span>
+                            <span>Copiar</span>
                         </>
                     )}
                 </button>

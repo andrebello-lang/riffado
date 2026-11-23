@@ -116,7 +116,7 @@ export function OnboardingDialog({
             onOpenChange(false);
             refresh();
         } catch {
-            toast.error("Failed to complete onboarding");
+            toast.error("Não foi possível concluir a configuração");
         }
     };
 
@@ -175,7 +175,7 @@ export function OnboardingDialog({
                                     onClick={() => setStep(prevStep)}
                                 >
                                     <ArrowLeft className="size-4 mr-2" />
-                                    Previous
+                                    Anterior
                                 </Button>
                             )}
                         </div>
@@ -205,18 +205,18 @@ export function OnboardingDialog({
                                     variant="ghost"
                                     onClick={() => setStep(nextStep)}
                                 >
-                                    Skip
+                                    Pular
                                 </Button>
                             )}
                             {step === "complete" ? (
                                 <Button onClick={handleComplete}>
-                                    Get Started
+                                    Começar
                                     <ArrowRight className="size-4 ml-2" />
                                 </Button>
                             ) : (
                                 nextStep && (
                                     <Button onClick={() => setStep(nextStep)}>
-                                        Next
+                                        Próximo
                                         <ArrowRight className="size-4 ml-2" />
                                     </Button>
                                 )

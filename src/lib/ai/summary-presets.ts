@@ -27,8 +27,8 @@ export interface SummaryPromptConfiguration {
 export const SUMMARY_PRESETS: Record<SummaryPreset, SummaryPromptConfig> = {
     general: {
         id: "general",
-        name: "General Summary",
-        description: "Concise summary of any audio transcription",
+        name: "Resumo geral",
+        description: "Resumo curto de qualquer captura",
         prompt: `Provide a concise summary of this audio transcription. Then extract key points and action items if any exist.
 
 Respond in the following JSON format (no markdown, no code fences):
@@ -45,9 +45,8 @@ Transcription:
     },
     "meeting-notes": {
         id: "meeting-notes",
-        name: "Meeting Notes",
-        description:
-            "Structured meeting summary with attendees, decisions, and action items",
+        name: "Ata de reunião",
+        description: "Resumo da reunião com participantes, decisões e tarefas",
         prompt: `Summarize this meeting recording. Include attendees mentioned, decisions made, and action items.
 
 Respond in the following JSON format (no markdown, no code fences):
@@ -64,8 +63,8 @@ Transcription:
     },
     "key-points": {
         id: "key-points",
-        name: "Key Points",
-        description: "Extract the key points as a bullet list",
+        name: "Pontos-chave",
+        description: "As ideias principais em tópicos",
         prompt: `Extract the key points from this transcription. Focus on the most important information, facts, and insights.
 
 Respond in the following JSON format (no markdown, no code fences):
@@ -80,9 +79,8 @@ Transcription:
     },
     "action-items": {
         id: "action-items",
-        name: "Action Items",
-        description:
-            "Extract all action items, tasks, and follow-ups mentioned",
+        name: "Tarefas",
+        description: "Todas as tarefas e próximos passos citados",
         prompt: `Extract all action items, tasks, and follow-ups mentioned in this transcription. Include who is responsible if mentioned.
 
 Respond in the following JSON format (no markdown, no code fences):
@@ -130,7 +128,7 @@ export function getAllSummaryPrompts(
     const customs = config.customPrompts.map((p) => ({
         id: p.id,
         name: p.name,
-        description: "Custom prompt",
+        description: "Modelo personalizado",
         prompt: p.prompt,
         isPreset: false,
     }));
@@ -144,35 +142,35 @@ export interface AiOutputLanguageOption {
 }
 
 export const AI_OUTPUT_LANGUAGES: readonly AiOutputLanguageOption[] = [
-    { code: "auto", label: "Auto (match transcript)" },
-    { code: "en", label: "English" },
-    { code: "es", label: "Spanish" },
-    { code: "fr", label: "French" },
-    { code: "de", label: "German" },
-    { code: "it", label: "Italian" },
-    { code: "pt", label: "Portuguese" },
-    { code: "nl", label: "Dutch" },
-    { code: "pl", label: "Polish" },
-    { code: "ru", label: "Russian" },
-    { code: "tr", label: "Turkish" },
-    { code: "uk", label: "Ukrainian" },
-    { code: "cs", label: "Czech" },
-    { code: "sv", label: "Swedish" },
-    { code: "da", label: "Danish" },
-    { code: "no", label: "Norwegian" },
-    { code: "fi", label: "Finnish" },
-    { code: "el", label: "Greek" },
-    { code: "ro", label: "Romanian" },
-    { code: "hu", label: "Hungarian" },
-    { code: "ja", label: "Japanese" },
-    { code: "zh", label: "Chinese (Simplified)" },
-    { code: "ko", label: "Korean" },
-    { code: "ar", label: "Arabic" },
-    { code: "he", label: "Hebrew" },
-    { code: "hi", label: "Hindi" },
-    { code: "id", label: "Indonesian" },
-    { code: "vi", label: "Vietnamese" },
-    { code: "th", label: "Thai" },
+    { code: "auto", label: "Automático (igual à transcrição)" },
+    { code: "en", label: "Inglês" },
+    { code: "es", label: "Espanhol" },
+    { code: "fr", label: "Francês" },
+    { code: "de", label: "Alemão" },
+    { code: "it", label: "Italiano" },
+    { code: "pt", label: "Português" },
+    { code: "nl", label: "Holandês" },
+    { code: "pl", label: "Polonês" },
+    { code: "ru", label: "Russo" },
+    { code: "tr", label: "Turco" },
+    { code: "uk", label: "Ucraniano" },
+    { code: "cs", label: "Tcheco" },
+    { code: "sv", label: "Sueco" },
+    { code: "da", label: "Dinamarquês" },
+    { code: "no", label: "Norueguês" },
+    { code: "fi", label: "Finlandês" },
+    { code: "el", label: "Grego" },
+    { code: "ro", label: "Romeno" },
+    { code: "hu", label: "Húngaro" },
+    { code: "ja", label: "Japonês" },
+    { code: "zh", label: "Chinês (simplificado)" },
+    { code: "ko", label: "Coreano" },
+    { code: "ar", label: "Árabe" },
+    { code: "he", label: "Hebraico" },
+    { code: "hi", label: "Híndi" },
+    { code: "id", label: "Indonésio" },
+    { code: "vi", label: "Vietnamita" },
+    { code: "th", label: "Tailandês" },
 ] as const;
 
 const LANGUAGE_CODES = new Set(AI_OUTPUT_LANGUAGES.map((l) => l.code));

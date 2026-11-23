@@ -110,12 +110,12 @@ export function EditProviderDialog({
         e.preventDefault();
 
         if (!providerName) {
-            toast.error("Provider name is required");
+            toast.error("O nome do provedor é obrigatório");
             return;
         }
 
         if (!provider?.id) {
-            toast.error("Provider ID is missing");
+            toast.error("Falta o ID do provedor");
             return;
         }
 
@@ -149,10 +149,12 @@ export function EditProviderDialog({
 
             if (!response.ok) {
                 const error = await response.json();
-                throw new Error(error.error || "Failed to update provider");
+                throw new Error(
+                    error.error || "Não foi possível atualizar o provedor",
+                );
             }
 
-            toast.success("AI provider updated successfully");
+            toast.success("Provedor de IA atualizado");
             onSuccess();
             onOpenChange(false);
 
@@ -166,7 +168,7 @@ export function EditProviderDialog({
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to update AI provider",
+                    : "Não foi possível atualizar o provedor de IA",
             );
         } finally {
             setIsLoading(false);
@@ -181,19 +183,19 @@ export function EditProviderDialog({
         <Dialog open={open} onOpenChange={onOpenChange} key={provider.id}>
             <DialogContent className="max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Edit AI Provider</DialogTitle>
+                    <DialogTitle>Editar provedor de IA</DialogTitle>
                 </DialogHeader>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label>Provider</Label>
+                        <Label>Provedor</Label>
                         <Select
                             value={providerName}
                             onValueChange={handleProviderChange}
                             disabled={isLoading}
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="Select a provider" />
+                                <SelectValue placeholder="Escolha um provedor" />
                             </SelectTrigger>
                             <SelectContent>
                                 {visiblePresets.map((preset) => (
@@ -235,13 +237,13 @@ export function EditProviderDialog({
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="apiKey">API Key</Label>
+                        <Label htmlFor="apiKey">Chave de API</Label>
                         <Input
                             id="apiKey"
                             type="password"
                             placeholder={
                                 selectedPreset?.placeholder ||
-                                "Enter a new key to replace the current one"
+                                "Digite uma chave nova para trocar a atual"
                             }
                             value={apiKey}
                             onChange={(e) => setApiKey(e.target.value)}
@@ -251,15 +253,15 @@ export function EditProviderDialog({
                         <div className="text-xs text-muted-foreground flex items-center gap-2">
                             <Shield className="size-3.5 shrink-0" />
                             <span>
-                                For security, the saved API key is never shown.
-                                Leave this blank to keep your current key, or
-                                enter a new key to replace it.
+                                Por segurança, a chave salva nunca aparece.
+                                Deixe em branco para manter a atual ou digite
+                                uma nova para trocar.
                             </span>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <Label htmlFor="baseUrl">Base URL (Optional)</Label>
+                        <Label htmlFor="baseUrl">URL base (opcional)</Label>
                         <Input
                             id="baseUrl"
                             type="text"
@@ -302,7 +304,7 @@ export function EditProviderDialog({
                                 }
                                 disabled={isLoading}
                             />
-                            <span>Use for transcription</span>
+                            <span>Usar para transcrição</span>
                         </label>
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -316,7 +318,7 @@ export function EditProviderDialog({
                                     !supportsEnhancement(provider.provider)
                                 }
                             />
-                            <span>Use for AI enhancements</span>
+                            <span>Usar para resumos e títulos</span>
                         </label>
                         {!supportsEnhancement(provider.provider) && (
                             <p className="text-xs text-muted-foreground pl-6">
@@ -332,14 +334,14 @@ export function EditProviderDialog({
                             disabled={isLoading}
                             className="flex-1"
                         >
-                            Cancel
+                            Cancelar
                         </MetalButton>
                         <MetalButton
                             type="submit"
                             disabled={isLoading}
                             className="flex-1"
                         >
-                            {isLoading ? "Updating..." : "Update Provider"}
+                            {isLoading ? "Salvando..." : "Salvar provedor"}
                         </MetalButton>
                     </div>
                 </form>

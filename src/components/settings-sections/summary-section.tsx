@@ -140,7 +140,9 @@ export function SummarySection() {
             // restoring `previous` here would resurrect an outdated value.
             if (promptAbortRef.current !== ctrl) return;
             setSelectedPrompt(previous);
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -169,22 +171,24 @@ export function SummarySection() {
                 selectedPrompt,
                 customPrompts: updatedPrompts,
             });
-            toast.success("Prompt saved");
+            toast.success("Modelo salvo");
         } catch {
             // Roll back the optimistic update -- otherwise a later save
             // (e.g. a preset change) would echo this rejected mutation
             // back to the server as if it had succeeded.
             setCustomPrompts(previousPrompts);
-            toast.error("Failed to save prompt. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar o modelo. As mudanças foram desfeitas.",
+            );
         }
     };
 
     const handleDeleteCustomPrompt = (id: string) => {
         void confirm({
-            title: "Delete this custom prompt?",
+            title: "Excluir este modelo personalizado?",
             description:
-                "Recordings already summarized with this prompt keep their existing summaries, but you won't be able to apply it again.",
-            confirmLabel: "Delete",
+                "As capturas já resumidas com ele mantêm os resumos, mas não será possível usá-lo de novo.",
+            confirmLabel: "Excluir",
             destructive: true,
             onConfirm: async () => {
                 const previousPrompts = customPrompts;
@@ -203,7 +207,9 @@ export function SummarySection() {
                     // Roll back both -- same reasoning as the save path above.
                     setCustomPrompts(previousPrompts);
                     setSelectedPrompt(previousSelectedPrompt);
-                    toast.error("Failed to delete prompt. Changes reverted.");
+                    toast.error(
+                        "Não foi possível excluir o modelo. As mudanças foram desfeitas.",
+                    );
                 }
             },
         });
@@ -233,7 +239,9 @@ export function SummarySection() {
         } catch {
             if (languageAbortRef.current !== ctrl) return;
             setOutputLanguage(previous);
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -256,7 +264,9 @@ export function SummarySection() {
         } catch {
             if (autoSummarizeAbortRef.current !== ctrl) return;
             setAutoSummarize(previous);
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -280,7 +290,9 @@ export function SummarySection() {
         } catch {
             if (autoPresetAbortRef.current !== ctrl) return;
             setAutoSummarizePreset(previous);
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -301,23 +313,23 @@ export function SummarySection() {
         : viewingCustom?.prompt || "";
     const viewingName = viewingPreset
         ? viewingPreset.name
-        : viewingCustom?.name || "Prompt";
+        : viewingCustom?.name || "Modelo";
     const viewingDescription = viewingPreset
         ? viewingPreset.description
-        : "Custom prompt";
+        : "Modelo personalizado";
     const autoPresetValue = autoSummarizePreset ?? AUTO_PRESET_DEFAULT;
 
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Summary"
-                description="Prompt presets and provider used when generating recording summaries."
+                title="Resumo"
+                description="Modelos e provedor usados para gerar os resumos das capturas."
                 icon={ListChecks}
             />
             <div className="space-y-4">
                 <div className="space-y-2">
                     <Label htmlFor="summary-preset">
-                        Default summary prompt
+                        Modelo de resumo padrão
                     </Label>
                     <Select
                         value={selectedPrompt}
@@ -332,7 +344,7 @@ export function SummarySection() {
                                     customPrompts.find(
                                         (p) => p.id === selectedPrompt,
                                     )?.name ||
-                                    "General Summary"}
+                                    "Resumo geral"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
@@ -351,7 +363,7 @@ export function SummarySection() {
                                     <div>
                                         <div>{prompt.name}</div>
                                         <div className="text-xs text-muted-foreground">
-                                            Custom prompt
+                                            Modelo personalizado
                                         </div>
                                     </div>
                                 </SelectItem>
@@ -359,13 +371,13 @@ export function SummarySection() {
                         </SelectContent>
                     </Select>
                     <p className="text-xs text-muted-foreground">
-                        The default prompt used when generating summaries. You
-                        can override this per-recording.
+                        O modelo usado para gerar resumos. Dá para trocar em
+                        cada captura.
                     </p>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="ai-output-language">
-                        AI output language
+                        Idioma das respostas da IA
                     </Label>
                     <Select
                         value={outputLanguage}
@@ -379,7 +391,7 @@ export function SummarySection() {
                             <SelectValue>
                                 {AI_OUTPUT_LANGUAGES.find(
                                     (l) => l.code === outputLanguage,
-                                )?.label ?? "Auto (match transcript)"}
+                                )?.label ?? "Automático (igual à transcrição)"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
@@ -391,21 +403,21 @@ export function SummarySection() {
                         </SelectContent>
                     </Select>
                     <p className="text-xs text-muted-foreground">
-                        Applies to AI-generated summaries and titles. Auto lets
-                        the model match the transcript's language.
+                        Vale para resumos e títulos gerados pela IA. Automático
+                        usa o mesmo idioma da transcrição.
                     </p>
                 </div>
                 <div className="flex items-center justify-between pt-2">
                     <div className="space-y-0.5 flex-1">
                         <Label htmlFor="auto-summarize" className="text-base">
-                            Auto-generate summary after transcription
+                            Gerar resumo depois da transcrição
                         </Label>
                         <p className="text-sm text-muted-foreground">
-                            Triggers after any successful transcription —
-                            manual, auto-sync, or re-transcribe. Enable
-                            Auto-transcribe to also cover newly synced
-                            recordings. Costs one extra AI provider call per
-                            generated summary.
+                            Roda depois de toda transcrição concluída: manual,
+                            automática ou refeita. Ative a transcrição
+                            automática para cobrir também as capturas novas.
+                            Cada resumo gera uma chamada a mais ao provedor de
+                            IA.
                         </p>
                     </div>
                     <Switch
@@ -418,7 +430,7 @@ export function SummarySection() {
                 {autoSummarize && (
                     <div className="space-y-2">
                         <Label htmlFor="auto-summarize-preset">
-                            Preset for auto-summary
+                            Modelo do resumo automático
                         </Label>
                         <Select
                             value={autoPresetValue}
@@ -431,19 +443,21 @@ export function SummarySection() {
                             >
                                 <SelectValue>
                                     {autoPresetValue === AUTO_PRESET_DEFAULT
-                                        ? "Use default summary prompt"
+                                        ? "Usar o modelo de resumo padrão"
                                         : SUMMARY_PRESETS[
                                               autoPresetValue as keyof typeof SUMMARY_PRESETS
                                           ]?.name ||
-                                          "Use default summary prompt"}
+                                          "Usar o modelo de resumo padrão"}
                                 </SelectValue>
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value={AUTO_PRESET_DEFAULT}>
                                     <div>
-                                        <div>Use default summary prompt</div>
+                                        <div>
+                                            Usar o modelo de resumo padrão
+                                        </div>
                                         <div className="text-xs text-muted-foreground">
-                                            Inherits the preset selected above
+                                            Segue o modelo escolhido acima
                                         </div>
                                     </div>
                                 </SelectItem>
@@ -465,9 +479,9 @@ export function SummarySection() {
                             </SelectContent>
                         </Select>
                         <p className="text-xs text-muted-foreground">
-                            Pick a different preset for the auto-mode (e.g.
-                            "Action Items" for meetings) without changing your
-                            manual default above.
+                            Escolha outro modelo para o resumo automático (ex.:
+                            "Tarefas" para reuniões) sem mudar o padrão manual
+                            acima.
                         </p>
                     </div>
                 )}
@@ -477,7 +491,7 @@ export function SummarySection() {
             <div className="space-y-4 pt-4 border-t">
                 <div className="flex items-center justify-between">
                     <h3 className="text-sm font-semibold">
-                        Custom Summary Prompts
+                        Modelos de resumo personalizados
                     </h3>
                     <Button
                         onClick={() =>
@@ -486,12 +500,12 @@ export function SummarySection() {
                         size="sm"
                     >
                         <Plus className="size-4 mr-2" />
-                        Add Custom Prompt
+                        Adicionar modelo
                     </Button>
                 </div>
                 {customPrompts.length === 0 ? (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                        No custom prompts yet. Create one to get started.
+                        Nenhum modelo personalizado ainda. Crie um para começar.
                     </p>
                 ) : (
                     <div className="space-y-2">
@@ -508,7 +522,7 @@ export function SummarySection() {
                                             </h4>
                                             {selectedPrompt === prompt.id && (
                                                 <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded border border-primary/20">
-                                                    Active
+                                                    Ativo
                                                 </span>
                                             )}
                                         </div>
@@ -521,7 +535,7 @@ export function SummarySection() {
                                                 setViewingPromptId(prompt.id)
                                             }
                                         >
-                                            View
+                                            Ver
                                         </Button>
                                         <Button
                                             variant="outline"
@@ -586,16 +600,16 @@ export function SummarySection() {
                     <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                         <DialogTitle>
                             {editingCustomPrompt.id
-                                ? "Edit Custom Prompt"
-                                : "Create Custom Prompt"}
+                                ? "Editar modelo personalizado"
+                                : "Criar modelo personalizado"}
                         </DialogTitle>
                         <DialogDescription>
-                            Create a custom prompt for summary generation. Use{" "}
+                            Crie um modelo para gerar resumos. Use{" "}
                             <code className="px-1 py-0.5 bg-muted rounded">
                                 {"{transcription}"}
                             </code>{" "}
-                            as a placeholder for the transcription text. The
-                            model must respond with a JSON object containing{" "}
+                            no lugar do texto da transcrição. O modelo precisa
+                            responder um objeto JSON com os campos{" "}
                             <code className="px-1 py-0.5 bg-muted rounded">
                                 summary
                             </code>
@@ -603,16 +617,16 @@ export function SummarySection() {
                             <code className="px-1 py-0.5 bg-muted rounded">
                                 keyPoints
                             </code>
-                            , and{" "}
+                            e{" "}
                             <code className="px-1 py-0.5 bg-muted rounded">
                                 actionItems
-                            </code>{" "}
-                            fields.
+                            </code>
+                            .
                         </DialogDescription>
                         <div className="space-y-4 mt-4">
                             <div className="space-y-2">
                                 <Label htmlFor="custom-summary-prompt-name">
-                                    Name
+                                    Nome
                                 </Label>
                                 <Input
                                     id="custom-summary-prompt-name"
@@ -627,12 +641,12 @@ export function SummarySection() {
                                                 : prev,
                                         )
                                     }
-                                    placeholder="My Custom Prompt"
+                                    placeholder="Meu modelo"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="custom-summary-prompt-text">
-                                    Prompt
+                                    Modelo
                                 </Label>
                                 <textarea
                                     id="custom-summary-prompt-text"
@@ -667,13 +681,12 @@ Transcription:
                                         "{transcription}",
                                     ) && (
                                         <p className="text-xs text-amber-600 dark:text-amber-500">
-                                            This prompt doesn&apos;t include{" "}
+                                            Este modelo não inclui{" "}
                                             <code className="px-1 py-0.5 bg-muted rounded">
                                                 {"{transcription}"}
                                             </code>{" "}
-                                            -- the transcript won&apos;t be
-                                            inserted, and the model will only
-                                            see this literal text.
+                                            : a transcrição não será inserida e
+                                            a IA verá só este texto.
                                         </p>
                                     )}
                             </div>
@@ -682,7 +695,7 @@ Transcription:
                                     variant="outline"
                                     onClick={() => setEditingCustomPrompt(null)}
                                 >
-                                    Cancel
+                                    Cancelar
                                 </Button>
                                 <Button
                                     onClick={() => {
@@ -691,7 +704,7 @@ Transcription:
                                             !editingCustomPrompt.prompt
                                         ) {
                                             toast.error(
-                                                "Name and prompt are required",
+                                                "Nome e modelo são obrigatórios",
                                             );
                                             return;
                                         }
@@ -704,7 +717,9 @@ Transcription:
                                         !editingCustomPrompt.prompt
                                     }
                                 >
-                                    {editingCustomPrompt.id ? "Save" : "Create"}
+                                    {editingCustomPrompt.id
+                                        ? "Salvar"
+                                        : "Criar"}
                                 </Button>
                             </div>
                         </div>

@@ -55,10 +55,10 @@ export function SettingsDialog({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="overflow-hidden p-0 md:max-h-[600px] md:max-w-[800px] lg:max-w-[900px]">
-                <DialogTitle className="sr-only">Settings</DialogTitle>
+                <DialogTitle className="sr-only">Configurações</DialogTitle>
                 <DialogDescription className="sr-only">
-                    Customize your settings here. Use arrow keys to navigate
-                    sections, Enter or Space to select, and Escape to close.
+                    Ajuste suas configurações. Use as setas para trocar de
+                    seção, Enter ou Espaço para escolher e Esc para fechar.
                 </DialogDescription>
                 <SidebarProvider className="items-start">
                     <SettingsNavSidebar

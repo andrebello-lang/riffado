@@ -40,7 +40,7 @@ export function RecordingListToolbar({
     onDensityChange: (next: ListDensity) => void;
 }) {
     return (
-        <div className="flex flex-col gap-2 border-b p-3">
+        <div className="mb-2 flex flex-col gap-2">
             <div className="relative">
                 <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
@@ -53,15 +53,15 @@ export function RecordingListToolbar({
                             onEnterSelectFirst();
                         }
                     }}
-                    placeholder="Search recordings, transcripts..."
+                    placeholder="Buscar capturas e transcrições..."
                     className="h-9 pl-8 pr-8"
-                    aria-label="Search recordings"
+                    aria-label="Buscar capturas"
                 />
                 {query && (
                     <button
                         type="button"
                         onClick={() => onQueryChange("")}
-                        aria-label="Clear search"
+                        aria-label="Limpar busca"
                         className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-muted-foreground hover:text-foreground"
                     >
                         <X className="size-4" />
@@ -70,9 +70,9 @@ export function RecordingListToolbar({
             </div>
             <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <span>
-                    {filteredCount}
-                    {query ? " matching" : ""} of {totalCount} recording
-                    {totalCount !== 1 ? "s" : ""}
+                    {query
+                        ? `${filteredCount} de ${totalCount} ${totalCount !== 1 ? "capturas" : "captura"}`
+                        : `${totalCount} ${totalCount !== 1 ? "capturas" : "captura"}`}
                 </span>
                 <div className="flex items-center gap-1">
                     <DropdownMenu>
@@ -81,20 +81,20 @@ export function RecordingListToolbar({
                                 variant="ghost"
                                 size="sm"
                                 className="h-7 px-2 text-xs"
-                                aria-label="Sort"
+                                aria-label="Ordenar"
                             >
                                 <ArrowDownAZ className="size-3.5" />
                                 <span>
                                     {sortOrder === "newest"
-                                        ? "Newest"
+                                        ? "Mais recentes"
                                         : sortOrder === "oldest"
-                                          ? "Oldest"
-                                          : "Name"}
+                                          ? "Mais antigas"
+                                          : "Nome"}
                                 </span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Sort by</DropdownMenuLabel>
+                            <DropdownMenuLabel>Ordenar por</DropdownMenuLabel>
                             <DropdownMenuRadioGroup
                                 value={sortOrder}
                                 onValueChange={(v) =>
@@ -102,10 +102,10 @@ export function RecordingListToolbar({
                                 }
                             >
                                 <DropdownMenuRadioItem value="newest">
-                                    Newest first
+                                    Mais recentes primeiro
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="oldest">
-                                    Oldest first
+                                    Mais antigas primeiro
                                 </DropdownMenuRadioItem>
                                 <DropdownMenuRadioItem value="name">
                                     Name
@@ -119,18 +119,18 @@ export function RecordingListToolbar({
                                 variant="ghost"
                                 size="sm"
                                 className="h-7 px-2 text-xs"
-                                aria-label="Density"
+                                aria-label="Densidade"
                             >
                                 <Rows3 className="size-3.5" />
                                 <span>
                                     {density === "compact"
-                                        ? "Compact"
-                                        : "Comfortable"}
+                                        ? "Compacta"
+                                        : "Confortável"}
                                 </span>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>Density</DropdownMenuLabel>
+                            <DropdownMenuLabel>Densidade</DropdownMenuLabel>
                             <DropdownMenuRadioGroup
                                 value={density}
                                 onValueChange={(v) =>

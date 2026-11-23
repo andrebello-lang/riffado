@@ -32,49 +32,49 @@ export type NavItem = {
  */
 const baseSettingsNavGroups: { label: string; items: NavItem[] }[] = [
     {
-        label: "AI",
+        label: "IA",
         items: [
-            { name: "Providers", id: "providers", icon: Bot },
-            { name: "Transcription", id: "transcription", icon: FileText },
-            { name: "Summary", id: "summary", icon: ListChecks },
+            { name: "Provedores de IA", id: "providers", icon: Bot },
+            { name: "Transcrição", id: "transcription", icon: FileText },
+            { name: "Resumo", id: "summary", icon: ListChecks },
         ],
     },
     {
         label: "Plaud",
         items: [
-            { name: "Plaud Account", id: "plaud-account", icon: Mic },
-            { name: "Sync", id: "sync", icon: RefreshCw },
+            { name: "Conta do Plaud", id: "plaud-account", icon: Mic },
+            { name: "Sincronização", id: "sync", icon: RefreshCw },
         ],
     },
     {
-        label: "Personalize",
+        label: "Personalizar",
         items: [
-            { name: "Playback", id: "playback", icon: Play },
-            { name: "Display", id: "display", icon: Monitor },
-            { name: "Notifications", id: "notifications", icon: Bell },
+            { name: "Reprodução", id: "playback", icon: Play },
+            { name: "Exibição", id: "display", icon: Monitor },
+            { name: "Notificações", id: "notifications", icon: Bell },
         ],
     },
     {
-        label: "Data",
+        label: "Dados",
         items: [
-            { name: "Storage", id: "storage", icon: HardDrive },
-            { name: "Export/Backup", id: "export", icon: Download },
+            { name: "Armazenamento", id: "storage", icon: HardDrive },
+            { name: "Exportar e backup", id: "export", icon: Download },
         ],
     },
     {
-        label: "Integrations",
+        label: "Integrações",
         items: [
-            { name: "API Keys", id: "api-keys", icon: KeyRound },
+            { name: "Chaves de API", id: "api-keys", icon: KeyRound },
             { name: "Webhooks", id: "webhooks", icon: Webhook },
         ],
     },
     ...(process.env.NODE_ENV !== "production"
         ? [
               {
-                  label: "Advanced",
+                  label: "Avançado",
                   items: [
                       {
-                          name: "Developer Tools",
+                          name: "Ferramentas de desenvolvimento",
                           id: "dev" as SettingsSection,
                           icon: Wrench,
                       },
@@ -95,10 +95,10 @@ export function buildSettingsNavGroups(opts: {
         ...(opts.isHosted
             ? [
                   {
-                      label: "Account",
+                      label: "Conta",
                       items: [
                           {
-                              name: "Billing",
+                              name: "Assinatura",
                               id: "billing" as SettingsSection,
                               icon: CreditCard,
                           },

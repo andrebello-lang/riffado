@@ -37,8 +37,8 @@ export default function GlobalError({
                         fontFamily: "system-ui, sans-serif",
                     }}
                 >
-                    <h2>Something went wrong</h2>
-                    <p>Please reload the page.</p>
+                    <h2>Algo deu errado</h2>
+                    <p>Recarregue a página.</p>
                 </div>
             </body>
         </html>

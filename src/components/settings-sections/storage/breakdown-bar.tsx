@@ -52,7 +52,7 @@ export function BreakdownBar({ segments, totalBytes }: BreakdownBarProps) {
     return (
         <div className="space-y-2">
             <div className="flex items-baseline justify-between gap-3">
-                <div className="text-sm font-medium">Storage breakdown</div>
+                <div className="text-sm font-medium">Uso por captura</div>
                 <div className="text-xs text-muted-foreground tabular-nums">
                     Top {segments.length} ={" "}
                     <span className="font-medium text-foreground">
@@ -64,7 +64,7 @@ export function BreakdownBar({ segments, totalBytes }: BreakdownBarProps) {
             <div
                 className="flex h-3 w-full overflow-hidden rounded-full bg-muted"
                 role="img"
-                aria-label={`Top ${segments.length} recordings account for ${topPct.toFixed(0)} percent of storage`}
+                aria-label={`As ${segments.length} maiores capturas ocupam ${topPct.toFixed(0)} por cento do armazenamento`}
             >
                 {segments.map((s, i) => (
                     <div
@@ -78,7 +78,7 @@ export function BreakdownBar({ segments, totalBytes }: BreakdownBarProps) {
                     <div
                         className={`${REST_COLOR} h-full`}
                         style={{ width: `${restWidth}%` }}
-                        title={`Everything else: ${formatBytes(restBytes)}`}
+                        title={`Todo o resto: ${formatBytes(restBytes)}`}
                     />
                 )}
             </div>

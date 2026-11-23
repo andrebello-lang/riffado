@@ -7,6 +7,7 @@ import {
     isToday,
     isYesterday,
 } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import type { DateTimeFormat } from "@/types/common";
 
 export type { DateTimeFormat };
@@ -19,13 +20,21 @@ export function formatDateTime(
 
     switch (formatType) {
         case "relative":
-            return formatDistanceToNow(dateObj, { addSuffix: true });
+            return formatDistanceToNow(dateObj, {
+                addSuffix: true,
+                locale: ptBR,
+            });
         case "absolute":
-            return format(dateObj, "MMM d, yyyy h:mm a");
+            return format(dateObj, "d 'de' MMM 'de' yyyy, HH:mm", {
+                locale: ptBR,
+            });
         case "iso":
             return dateObj.toISOString();
         default:
-            return formatDistanceToNow(dateObj, { addSuffix: true });
+            return formatDistanceToNow(dateObj, {
+                addSuffix: true,
+                locale: ptBR,
+            });
     }
 }
 
@@ -38,25 +47,27 @@ export function formatRecordingDateTimeRange(
     const endDate = new Date(startDate.getTime() + durationMs);
 
     if (isSameDay(startDate, endDate)) {
-        return `${format(startDate, "MMM d, yyyy · h:mm a")}–${format(endDate, "h:mm a")}`;
+        return `${format(startDate, "d 'de' MMM 'de' yyyy · HH:mm", { locale: ptBR })}–${format(endDate, "HH:mm")}`;
     }
 
-    return `${format(startDate, "MMM d, yyyy · h:mm a")}–${format(endDate, "MMM d, yyyy · h:mm a")}`;
+    return `${format(startDate, "d 'de' MMM 'de' yyyy · HH:mm", { locale: ptBR })}–${format(endDate, "d 'de' MMM 'de' yyyy · HH:mm", { locale: ptBR })}`;
 }
 
 /** Recording-list group label: Today / Yesterday / This week / month / Month YYYY. */
 export function dateGroupLabel(date: Date | string): string {
     const d = typeof date === "string" ? new Date(date) : date;
-    if (isToday(d)) return "Today";
-    if (isYesterday(d)) return "Yesterday";
+    if (isToday(d)) return "Hoje";
+    if (isYesterday(d)) return "Ontem";
     const now = new Date();
     const days = differenceInDays(now, d);
-    if (days >= 0 && days < 7) return "This week";
+    if (days >= 0 && days < 7) return "Esta semana";
     if (
         d.getMonth() === now.getMonth() &&
         d.getFullYear() === now.getFullYear()
     ) {
-        return "Earlier this month";
+        return "Antes, neste mês";
     }
-    return isThisYear(d) ? format(d, "MMMM") : format(d, "MMMM yyyy");
+    return isThisYear(d)
+        ? format(d, "MMMM", { locale: ptBR })
+        : format(d, "MMMM 'de' yyyy", { locale: ptBR });
 }

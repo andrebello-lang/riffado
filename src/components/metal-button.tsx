@@ -4,17 +4,17 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const metalButtonVariants = cva(
-    "metal-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+    "metal-button inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
                 default: "",
-                cyan: "text-accent-cyan",
+                cyan: "metal-button-primary",
                 pink: "text-accent-pink",
                 orange: "text-accent-orange",
             },
             size: {
-                default: "h-10 px-6 py-2",
+                default: "h-11 px-6 py-2",
                 sm: "h-8 px-4 text-xs",
                 lg: "h-12 px-8 text-base",
                 icon: "size-10",

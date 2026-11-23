@@ -21,7 +21,7 @@ interface LoginFormProps {
     registrationEnabled?: boolean;
     /**
      * Whether SMTP is configured on this instance. When false we hide the
-     * "Forgot password?" link entirely because the reset email cannot be
+     * "Esqueci a senha" link entirely because the reset email cannot be
      * delivered -- end users shouldn't see a non-functional affordance on
      * the sign-in screen. Self-host operators get the explanatory panel
      * (with the SMTP env-var names) by navigating to /forgot-password
@@ -55,7 +55,7 @@ export function LoginForm({
 
             if (result.error) {
                 toast.error(
-                    result.error.message || "Invalid email or password",
+                    result.error.message || "E-mail ou senha inválidos",
                 );
                 return;
             }
@@ -66,14 +66,14 @@ export function LoginForm({
                 posthog.capture("user_signed_in");
             }
 
-            toast.success("Logged in successfully");
+            toast.success("Você entrou");
             push("/dashboard");
             refresh();
         } catch (error) {
             const message =
                 error instanceof Error
                     ? error.message
-                    : "Invalid email or password";
+                    : "E-mail ou senha inválidos";
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -84,11 +84,11 @@ export function LoginForm({
         <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">E-mail</Label>
                     <Input
                         id="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder="voce@exemplo.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
@@ -99,13 +99,13 @@ export function LoginForm({
 
                 <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">Senha</Label>
                         {smtpConfigured ? (
                             <Link
                                 href="/forgot-password"
                                 className="text-xs text-muted-foreground hover:text-accent-cyan hover:underline"
                             >
-                                Forgot password?
+                                Esqueci a senha
                             </Link>
                         ) : null}
                     </div>
@@ -127,20 +127,20 @@ export function LoginForm({
                     variant="cyan"
                     disabled={isLoading}
                 >
-                    {isLoading ? "Signing in..." : "Sign In"}
+                    {isLoading ? "Entrando..." : "Entrar"}
                 </MetalButton>
             </form>
 
             {registrationEnabled && (
                 <div className="text-center text-sm">
                     <span className="text-muted-foreground">
-                        Don't have an account?{" "}
+                        Primeira vez?{" "}
                     </span>
                     <Link
                         href="/register"
                         className="text-accent-cyan hover:underline"
                     >
-                        Register
+                        Criar conta
                     </Link>
                 </div>
             )}

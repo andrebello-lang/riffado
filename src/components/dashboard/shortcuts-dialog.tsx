@@ -20,19 +20,19 @@ interface ShortcutRow {
 
 const groups: { title: string; rows: ShortcutRow[] }[] = [
     {
-        title: "Global",
+        title: "Geral",
         rows: [
-            { keys: ["⌘", "K"], description: "Command palette" },
-            { keys: ["?"], description: "Show this cheatsheet" },
-            { keys: [","], description: "Open settings" },
-            { keys: ["/"], description: "Focus search" },
+            { keys: ["⌘", "K"], description: "Busca e comandos" },
+            { keys: ["?"], description: "Mostrar esta lista" },
+            { keys: [","], description: "Abrir configurações" },
+            { keys: ["/"], description: "Ir para a busca" },
         ],
     },
     {
-        title: "Recording list",
+        title: "Lista de capturas",
         rows: [
-            { keys: ["j"], description: "Next recording" },
-            { keys: ["k"], description: "Previous recording" },
+            { keys: ["j"], description: "Próxima captura" },
+            { keys: ["k"], description: "Captura anterior" },
             // No `Enter → Focus player` row here: selecting a recording
             // via j/k already mounts the player; there's no separate
             // "focus the player" gesture and adding one would conflict
@@ -42,11 +42,11 @@ const groups: { title: string; rows: ShortcutRow[] }[] = [
     {
         title: "Player",
         rows: [
-            { keys: ["Space"], description: "Play / pause" },
-            { keys: ["←"], description: "Seek back 5s" },
-            { keys: ["→"], description: "Seek forward 5s" },
-            { keys: ["↑"], description: "Volume up" },
-            { keys: ["↓"], description: "Volume down" },
+            { keys: ["Space"], description: "Tocar / pausar" },
+            { keys: ["←"], description: "Voltar 5 s" },
+            { keys: ["→"], description: "Avançar 5 s" },
+            { keys: ["↑"], description: "Aumentar volume" },
+            { keys: ["↓"], description: "Diminuir volume" },
         ],
     },
 ];
@@ -64,9 +64,9 @@ export function ShortcutsDialog({ open, onOpenChange }: ShortcutsDialogProps) {
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>Keyboard shortcuts</DialogTitle>
+                    <DialogTitle>Atalhos de teclado</DialogTitle>
                     <DialogDescription>
-                        Power-user shortcuts available across the dashboard.
+                        Atalhos disponíveis em todo o painel.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-5">

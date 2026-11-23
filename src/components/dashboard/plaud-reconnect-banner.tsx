@@ -137,33 +137,34 @@ export function PlaudReconnectBanner({
                     {state === "ending-soon" ? (
                         <div className="space-y-0.5">
                             <p className="text-sm font-medium text-foreground">
-                                Your Plaud connection ends on {endsOn}
+                                Sua conexão com o Plaud termina em {endsOn}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                                Reconnect to keep syncing.
+                                Reconecte para continuar sincronizando.
                             </p>
                         </div>
                     ) : (
                         <div className="space-y-0.5">
                             <p className="text-sm font-medium text-foreground">
-                                Your Plaud connection needs to be reconnected
+                                Sua conexão com o Plaud precisa ser refeita
                             </p>
                             <p className="text-sm text-muted-foreground">
-                                Plaud stopped accepting your saved sign-in, so
-                                new recordings aren't syncing. Reconnect to
-                                resume. Your existing recordings stay put.
+                                O Plaud deixou de aceitar o login salvo, então
+                                gravações novas não estão chegando. Reconecte
+                                para voltar. As capturas que já estão aqui
+                                ficam.
                             </p>
                         </div>
                     )}
                 </div>
                 <div className="flex shrink-0 items-center gap-2 self-start sm:self-auto">
-                    <Button onClick={() => setOpen(true)}>Reconnect</Button>
+                    <Button onClick={() => setOpen(true)}>Reconectar</Button>
                     {state === "ending-soon" && (
                         <button
                             type="button"
                             onClick={dismissEndingSoon}
                             className="rounded p-1 text-muted-foreground transition-colors hover:text-foreground"
-                            aria-label="Dismiss Plaud connection ending notice"
+                            aria-label="Dispensar o aviso de fim da conexão com o Plaud"
                         >
                             <X className="size-4" />
                         </button>
@@ -174,10 +175,10 @@ export function PlaudReconnectBanner({
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="max-w-lg">
                     <DialogHeader>
-                        <DialogTitle>Reconnect your Plaud account</DialogTitle>
+                        <DialogTitle>Reconectar sua conta do Plaud</DialogTitle>
                         <DialogDescription>
-                            Sign back in to keep syncing. Your existing
-                            recordings and transcripts are unaffected.
+                            Entre de novo para continuar sincronizando. Suas
+                            capturas e transcrições não são afetadas.
                         </DialogDescription>
                     </DialogHeader>
                     {open && (

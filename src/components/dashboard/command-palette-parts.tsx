@@ -98,7 +98,7 @@ export function RecordingsGroup({
     const overflowCount = Math.max(0, recordings.length - RECORDING_CAP);
 
     return (
-        <Command.Group heading="Recent">
+        <Command.Group heading="Recentes">
             {recordings.map((r) => {
                 const snippet = transcriptSnippet(
                     transcriptions.get(r.id)?.text,
@@ -114,21 +114,21 @@ export function RecordingsGroup({
                     );
                     stateLabel =
                         inFlight === "transcribing"
-                            ? "Transcribing"
-                            : "Summarizing";
+                            ? "Transcrevendo"
+                            : "Resumindo";
                 } else if (!r.hasTranscript) {
                     stateIcon = (
                         <Mic className="size-4 text-muted-foreground" />
                     );
-                    stateLabel = "Audio only";
+                    stateLabel = "Só áudio";
                 } else if (!r.hasSummary) {
                     stateIcon = (
                         <FileText className="size-4 text-foreground/70" />
                     );
-                    stateLabel = "Transcribed";
+                    stateLabel = "Transcrita";
                 } else {
                     stateIcon = <Sparkles className="size-4 text-primary" />;
-                    stateLabel = "Transcribed & summarized";
+                    stateLabel = "Transcrita e resumida";
                 }
 
                 const durationText =
@@ -147,14 +147,14 @@ export function RecordingsGroup({
                     accessory = (
                         <span className="cmd-pill">
                             <Loader2 className="size-3 animate-spin" />
-                            Transcribing
+                            Transcrevendo
                         </span>
                     );
                 } else if (inFlight === "summarizing") {
                     accessory = (
                         <span className="cmd-pill">
                             <Loader2 className="size-3 animate-spin" />
-                            Summarizing
+                            Resumindo
                         </span>
                     );
                 } else if (!r.hasTranscript) {
@@ -168,10 +168,10 @@ export function RecordingsGroup({
                                 e.stopPropagation();
                                 onTranscribeRecording(r.id);
                             }}
-                            aria-label={`Transcribe ${r.filename}`}
+                            aria-label={`Transcrever ${r.filename}`}
                         >
                             <Sparkles className="size-3" aria-hidden="true" />
-                            Transcribe
+                            Transcrever
                         </button>
                     );
                 } else if (isCurrent) {
@@ -181,7 +181,7 @@ export function RecordingsGroup({
                                 aria-hidden="true"
                                 className="inline-block size-1.5 rounded-full bg-primary"
                             />
-                            Selected
+                            Selecionada
                         </span>
                     );
                 }
@@ -229,32 +229,32 @@ export function ActionsGroup({
     runAction: (fn: () => void) => () => void;
 }) {
     return (
-        <Command.Group heading="Actions">
+        <Command.Group heading="Ações">
             <Command.Item onSelect={runAction(onSync)}>
                 <Row
                     icon={
                         <RefreshCw className="size-4 text-muted-foreground" />
                     }
-                    title="Sync device"
+                    title="Sincronizar"
                 />
             </Command.Item>
             <Command.Item onSelect={runAction(onUpload)}>
                 <Row
                     icon={<Upload className="size-4 text-muted-foreground" />}
-                    title="Upload audio"
+                    title="Enviar áudio"
                 />
             </Command.Item>
             <Command.Item onSelect={runAction(onOpenSettings)}>
                 <Row
                     icon={<Settings className="size-4 text-muted-foreground" />}
-                    title="Open settings"
+                    title="Abrir configurações"
                     accessory={<Kbd>,</Kbd>}
                 />
             </Command.Item>
             <Command.Item onSelect={runAction(onOpenShortcuts)}>
                 <Row
                     icon={<Keyboard className="size-4 text-muted-foreground" />}
-                    title="Keyboard shortcuts"
+                    title="Atalhos de teclado"
                     accessory={<Kbd>?</Kbd>}
                 />
             </Command.Item>
@@ -272,14 +272,14 @@ export function ThemeGroup({
     runAction: (fn: () => void) => () => void;
 }) {
     return (
-        <Command.Group heading="Theme">
+        <Command.Group heading="Tema">
             <Command.Item onSelect={runAction(() => onSetTheme("light"))}>
                 <Row
                     icon={<Sun className="size-4 text-muted-foreground" />}
-                    title="Light"
+                    title="Claro"
                     accessory={
                         currentTheme === "light" ? (
-                            <span className="cmd-pill">Active</span>
+                            <span className="cmd-pill">Ativo</span>
                         ) : null
                     }
                 />
@@ -287,10 +287,10 @@ export function ThemeGroup({
             <Command.Item onSelect={runAction(() => onSetTheme("dark"))}>
                 <Row
                     icon={<Moon className="size-4 text-muted-foreground" />}
-                    title="Dark"
+                    title="Escuro"
                     accessory={
                         currentTheme === "dark" ? (
-                            <span className="cmd-pill">Active</span>
+                            <span className="cmd-pill">Ativo</span>
                         ) : null
                     }
                 />
@@ -298,10 +298,10 @@ export function ThemeGroup({
             <Command.Item onSelect={runAction(() => onSetTheme("system"))}>
                 <Row
                     icon={<Monitor className="size-4 text-muted-foreground" />}
-                    title="Auto"
+                    title="Automático"
                     accessory={
                         currentTheme === "system" ? (
-                            <span className="cmd-pill">Active</span>
+                            <span className="cmd-pill">Ativo</span>
                         ) : null
                     }
                 />
@@ -321,15 +321,15 @@ export function PaletteFooter({
                 <span className="cmd-footer-hint">
                     <Kbd>↑</Kbd>
                     <Kbd>↓</Kbd>
-                    navigate
+                    navegar
                 </span>
                 <span className="cmd-footer-hint">
                     <Kbd>↵</Kbd>
-                    select
+                    abrir
                 </span>
                 <span className="cmd-footer-hint">
                     <Kbd>esc</Kbd>
-                    close
+                    fechar
                 </span>
                 {showTranscribeHint && (
                     <span className="cmd-footer-hint">

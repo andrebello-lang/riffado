@@ -17,35 +17,35 @@ import { useSettings } from "@/hooks/use-settings";
 
 const dateTimeFormatOptions = [
     {
-        label: "Relative",
+        label: "Relativo",
         value: "relative",
-        description: "e.g., 2 hours ago",
+        description: "ex.: há 2 horas",
     },
     {
-        label: "Absolute",
+        label: "Data e hora",
         value: "absolute",
-        description: "e.g., Jan 15, 2024 3:45 PM",
+        description: "ex.: 15 de jan. de 2024, 15:45",
     },
     {
         label: "ISO",
         value: "iso",
-        description: "e.g., 2024-01-15T15:45:00Z",
+        description: "ex.: 2024-01-15T15:45:00Z",
     },
 ];
 
 const sortOrderOptions = [
-    { label: "Newest first", value: "newest" },
-    { label: "Oldest first", value: "oldest" },
-    { label: "By name", value: "name" },
+    { label: "Mais recentes primeiro", value: "newest" },
+    { label: "Mais antigas primeiro", value: "oldest" },
+    { label: "Por nome", value: "name" },
 ];
 
 const themeOptions = [
-    { label: "Light", value: "light" },
-    { label: "Dark", value: "dark" },
+    { label: "Claro", value: "light" },
+    { label: "Escuro", value: "dark" },
     {
-        label: "System",
+        label: "Sistema",
         value: "system",
-        description: "Follow system preference",
+        description: "Segue o tema do aparelho",
     },
 ];
 
@@ -149,7 +149,9 @@ export function DisplaySection() {
                     const prev = previousValues.theme;
                     if (typeof prev === "string") setTheme(prev);
                 }
-                toast.error("Failed to save settings. Changes reverted.");
+                toast.error(
+                    "Não foi possível salvar. As mudanças foram desfeitas.",
+                );
             }
         };
 
@@ -171,13 +173,15 @@ export function DisplaySection() {
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Display"
-                description="How dates, lists, and the overall UI present themselves."
+                title="Exibição"
+                description="Como datas, listas e a interface aparecem."
                 icon={Monitor}
             />
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="date-time-format">Date/time format</Label>
+                    <Label htmlFor="date-time-format">
+                        Formato de data e hora
+                    </Label>
                     <Select
                         value={dateTimeFormat}
                         onValueChange={(value) => {
@@ -192,7 +196,7 @@ export function DisplaySection() {
                             <SelectValue>
                                 {dateTimeFormatOptions.find(
                                     (opt) => opt.value === dateTimeFormat,
-                                )?.label || "Relative"}
+                                )?.label || "Relativo"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
@@ -215,7 +219,7 @@ export function DisplaySection() {
 
                 <div className="space-y-2">
                     <Label htmlFor="sort-order">
-                        Recording list sort order
+                        Ordem da lista de capturas
                     </Label>
                     <Select
                         value={recordingListSortOrder}
@@ -232,7 +236,7 @@ export function DisplaySection() {
                                 {sortOrderOptions.find(
                                     (opt) =>
                                         opt.value === recordingListSortOrder,
-                                )?.label || "Newest first"}
+                                )?.label || "Mais recentes primeiro"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
@@ -249,7 +253,7 @@ export function DisplaySection() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="items-per-page">Items per page</Label>
+                    <Label htmlFor="items-per-page">Itens por página</Label>
                     <Input
                         id="items-per-page"
                         type="number"
@@ -277,7 +281,7 @@ export function DisplaySection() {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="theme">Theme</Label>
+                    <Label htmlFor="theme">Tema</Label>
                     <Select
                         value={theme}
                         onValueChange={(value) => {
@@ -289,7 +293,7 @@ export function DisplaySection() {
                         <SelectTrigger id="theme" className="w-full">
                             <SelectValue>
                                 {themeOptions.find((opt) => opt.value === theme)
-                                    ?.label || "System"}
+                                    ?.label || "Sistema"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>

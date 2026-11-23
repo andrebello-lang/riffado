@@ -307,11 +307,11 @@ export function Waveform({
             onKeyDown={onKeyDown}
             role="slider"
             tabIndex={disabled ? -1 : 0}
-            aria-label="Audio waveform scrubber"
+            aria-label="Linha do tempo do áudio"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(progress * 100)}
-            aria-valuetext={`${formatSeconds(progress * durationSeconds)} of ${formatSeconds(durationSeconds)}`}
+            aria-valuetext={`${formatSeconds(progress * durationSeconds)} de ${formatSeconds(durationSeconds)}`}
             aria-disabled={disabled || undefined}
             style={{ height }}
         >

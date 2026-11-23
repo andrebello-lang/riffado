@@ -36,7 +36,7 @@ export function WebhooksSection() {
             setWebhooks(data.webhooks);
             setEvents(data.events);
         } catch {
-            toast.error("Failed to load webhooks");
+            toast.error("Não foi possível carregar os webhooks");
         } finally {
             setIsLoading(false);
         }
@@ -53,11 +53,11 @@ export function WebhooksSection() {
 
     const handleDelete = (webhookId: string) => {
         void confirm({
-            title: "Delete this webhook?",
+            title: "Excluir este webhook?",
             description:
-                "Deliveries will stop immediately. You'll have to recreate the endpoint and re-share its signing secret with any consumers.",
-            confirmLabel: "Delete",
-            pendingLabel: "Deleting…",
+                "Os envios param na hora. Para voltar, será preciso criar o endereço de novo e repassar o novo segredo de assinatura.",
+            confirmLabel: "Excluir",
+            pendingLabel: "Excluindo…",
             destructive: true,
             onConfirm: async () => {
                 const response = await fetch(
@@ -65,10 +65,10 @@ export function WebhooksSection() {
                     { method: "DELETE" },
                 );
                 if (!response.ok) throw new Error("Failed to delete webhook");
-                toast.success("Webhook deleted");
+                toast.success("Webhook excluído");
                 await refreshWebhooks();
             },
-            errorMessage: "Failed to delete webhook",
+            errorMessage: "Não foi possível excluir o webhook",
         });
     };
 
@@ -76,12 +76,12 @@ export function WebhooksSection() {
         <div className="space-y-6">
             <SettingsSectionHeader
                 title="Webhooks"
-                description="Outbound HTTP notifications for recording, transcript, and summary events."
+                description="Avisos HTTP para fora (ex.: n8n) quando chegam capturas, transcrições e resumos."
                 icon={Webhook}
                 action={
                     <Button size="sm" onClick={() => openEditor(null)}>
                         <Plus className="size-4" />
-                        Add Webhook
+                        Adicionar webhook
                     </Button>
                 }
             />
@@ -93,10 +93,10 @@ export function WebhooksSection() {
             ) : webhooks.length === 0 ? (
                 <div className="text-center py-12 border rounded-lg">
                     <Webhook className="size-12 mx-auto mb-3 text-muted-foreground" />
-                    <h3 className="font-semibold mb-2">No webhooks</h3>
+                    <h3 className="font-semibold mb-2">Nenhum webhook</h3>
                     <Button size="sm" onClick={() => openEditor(null)}>
                         <Plus className="size-4" />
-                        Add Webhook
+                        Adicionar webhook
                     </Button>
                 </div>
             ) : (
@@ -158,7 +158,7 @@ function WebhookRow({
                                 : "text-muted-foreground"
                         }`}
                     >
-                        {webhook.enabled ? "Enabled" : "Disabled"}
+                        {webhook.enabled ? "Ativo" : "Inativo"}
                     </span>
                     {webhook.lastDeliveryStatus && (
                         <span className="rounded border px-2 py-0.5 text-xs">
@@ -189,13 +189,13 @@ function WebhookRow({
                     size="sm"
                     onClick={() => onShowDeliveries(webhook)}
                 >
-                    Deliveries
+                    Envios
                 </Button>
                 <Button
                     variant="outline"
                     size="icon"
                     onClick={() => onEdit(webhook)}
-                    aria-label="Edit webhook"
+                    aria-label="Editar webhook"
                 >
                     <Pencil className="size-4" />
                 </Button>
@@ -203,7 +203,7 @@ function WebhookRow({
                     variant="outline"
                     size="icon"
                     onClick={() => onDelete(webhook.id)}
-                    aria-label="Delete webhook"
+                    aria-label="Excluir webhook"
                 >
                     <Trash2 className="size-4 text-destructive" />
                 </Button>

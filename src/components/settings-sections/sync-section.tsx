@@ -17,18 +17,19 @@ import {
 import { useSettings } from "@/hooks/use-settings";
 
 const syncIntervalPresets = [
-    { label: "1 minute", value: 60 * 1000 },
-    { label: "2 minutes", value: 2 * 60 * 1000 },
-    { label: "5 minutes", value: 5 * 60 * 1000 },
-    { label: "10 minutes", value: 10 * 60 * 1000 },
-    { label: "15 minutes", value: 15 * 60 * 1000 },
-    { label: "30 minutes", value: 30 * 60 * 1000 },
-    { label: "1 hour", value: 60 * 60 * 1000 },
+    { label: "1 minuto", value: 60 * 1000 },
+    { label: "2 minutos", value: 2 * 60 * 1000 },
+    { label: "5 minutos", value: 5 * 60 * 1000 },
+    { label: "10 minutos", value: 10 * 60 * 1000 },
+    { label: "15 minutos", value: 15 * 60 * 1000 },
+    { label: "30 minutos", value: 30 * 60 * 1000 },
+    { label: "1 hora", value: 60 * 60 * 1000 },
 ];
 
 const getSyncIntervalLabel = (value: number) => {
     return (
-        syncIntervalPresets.find((p) => p.value === value)?.label || "Custom"
+        syncIntervalPresets.find((p) => p.value === value)?.label ||
+        "Personalizado"
     );
 };
 
@@ -124,7 +125,9 @@ export function SyncSection() {
                 const prev = previousValues.syncNotifications;
                 if (typeof prev === "boolean") setSyncNotifications(prev);
             }
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -139,16 +142,16 @@ export function SyncSection() {
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Sync"
-                description="When and how Riffado pulls new recordings from your Plaud device."
+                title="Sincronização"
+                description="Quando e como o Brieffado busca as gravações novas do seu Plaud."
                 icon={RefreshCw}
             />
             <div className="space-y-3">
-                <SettingsCard title="Auto-sync">
+                <SettingsCard title="Sincronização automática">
                     <ToggleRow
                         id="auto-sync"
-                        label="Enable auto-sync"
-                        description="Automatically sync recordings from your Plaud device at regular intervals."
+                        label="Ativar sincronização automática"
+                        description="Busca as gravações do Plaud de tempos em tempos."
                         checked={autoSyncEnabled}
                         onCheckedChange={(checked) => {
                             setAutoSyncEnabled(checked);
@@ -162,9 +165,7 @@ export function SyncSection() {
                     {autoSyncEnabled && (
                         <div className="mt-3 space-y-3 border-t pt-3">
                             <div className="space-y-2">
-                                <Label htmlFor="sync-interval">
-                                    Sync interval
-                                </Label>
+                                <Label htmlFor="sync-interval">Intervalo</Label>
                                 <Select
                                     value={syncInterval.toString()}
                                     onValueChange={(value) => {
@@ -199,8 +200,8 @@ export function SyncSection() {
 
                             <ToggleRow
                                 id="sync-on-mount"
-                                label="Sync on app load"
-                                description="Automatically sync when the app first loads."
+                                label="Sincronizar ao abrir"
+                                description="Sincroniza quando o app é aberto."
                                 checked={syncOnMount}
                                 onCheckedChange={(checked) => {
                                     setSyncOnMount(checked);
@@ -213,8 +214,8 @@ export function SyncSection() {
 
                             <ToggleRow
                                 id="sync-on-visibility"
-                                label="Sync on tab visibility"
-                                description="Sync when you return to the app tab."
+                                label="Sincronizar ao voltar para a aba"
+                                description="Sincroniza quando você volta para a aba do app."
                                 checked={syncOnVisibilityChange}
                                 onCheckedChange={(checked) => {
                                     setSyncOnVisibilityChange(checked);
@@ -228,11 +229,11 @@ export function SyncSection() {
                     )}
                 </SettingsCard>
 
-                <SettingsCard title="Notifications">
+                <SettingsCard title="Avisos">
                     <ToggleRow
                         id="sync-notifications"
-                        label="Show sync notifications"
-                        description="Display notifications when sync completes."
+                        label="Mostrar avisos de sincronização"
+                        description="Avisa quando a sincronização termina."
                         checked={syncNotifications}
                         onCheckedChange={(checked) => {
                             setSyncNotifications(checked);

@@ -54,14 +54,14 @@ export function useTranscribeQueue({ onTranscribeComplete }: Options) {
                     { method: "POST" },
                 );
                 if (response.ok) {
-                    toast.success("Transcription complete");
+                    toast.success("Transcrição concluída");
                     onTranscribeComplete();
                 } else {
                     const error = await response.json();
-                    toast.error(error.error || "Transcription failed");
+                    toast.error(error.error || "Falha na transcrição");
                 }
             } catch {
-                toast.error("Failed to transcribe recording");
+                toast.error("Não foi possível transcrever a captura");
             } finally {
                 // Per-id clear only -- don't touch any global "is
                 // transcribing" flag (there isn't one), so a concurrent

@@ -103,11 +103,11 @@ export function PromptManager() {
                 body: JSON.stringify({ titleGenerationPrompt: config }),
             });
             if (!response.ok) {
-                throw new Error("Failed to save prompt settings");
+                throw new Error("Não foi possível salvar os modelos");
             }
-            toast.success("Prompt settings saved");
+            toast.success("Modelos salvos");
         } catch {
-            toast.error("Failed to save prompt settings");
+            toast.error("Não foi possível salvar os modelos");
         }
     };
 
@@ -138,10 +138,10 @@ export function PromptManager() {
 
     const handleDeleteCustomPrompt = (id: string) => {
         void confirm({
-            title: "Delete this custom prompt?",
+            title: "Excluir este modelo personalizado?",
             description:
-                "Recordings already summarized with this prompt keep their existing summaries, but you won't be able to apply it again.",
-            confirmLabel: "Delete",
+                "As capturas já resumidas com ele mantêm os resumos, mas não será possível usá-lo de novo.",
+            confirmLabel: "Excluir",
             destructive: true,
             onConfirm: async () => {
                 const updatedPrompts = customPrompts.filter((p) => p.id !== id);
@@ -176,19 +176,19 @@ export function PromptManager() {
         viewingPromptId &&
         (PROMPT_PRESETS[viewingPromptId as keyof typeof PROMPT_PRESETS]?.name ||
             customPrompts.find((p) => p.id === viewingPromptId)?.name ||
-            "Prompt");
+            "Modelo");
 
     const viewingDescription =
         viewingPromptId &&
         (PROMPT_PRESETS[viewingPromptId as keyof typeof PROMPT_PRESETS]
             ?.description ||
-            "Custom prompt");
+            "Modelo personalizado");
 
     return (
         <div className="space-y-6">
             {/* Active prompt selector */}
             <div className="space-y-2">
-                <Label htmlFor="selected-prompt">Active Prompt</Label>
+                <Label htmlFor="selected-prompt">Modelo ativo</Label>
                 <Select
                     value={selectedPromptId}
                     onValueChange={(value) => {
@@ -217,14 +217,14 @@ export function PromptManager() {
                     </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
-                    Select which prompt to use for title generation
+                    Escolha o modelo usado para gerar os títulos
                 </p>
             </div>
 
             {/* Preset prompts (read-only) */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Preset Prompts</h3>
+                    <h3 className="text-sm font-semibold">Modelos prontos</h3>
                 </div>
                 <div className="space-y-2">
                     {Object.values(PROMPT_PRESETS).map((preset) => (
@@ -237,7 +237,7 @@ export function PromptManager() {
                                         </h4>
                                         {selectedPromptId === preset.id && (
                                             <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded border border-primary/20">
-                                                Active
+                                                Ativo
                                             </span>
                                         )}
                                     </div>
@@ -252,7 +252,7 @@ export function PromptManager() {
                                         setViewingPromptId(preset.id)
                                     }
                                 >
-                                    View Prompt
+                                    Ver modelo
                                 </Button>
                             </div>
                         </div>
@@ -263,7 +263,9 @@ export function PromptManager() {
             {/* Custom prompts */}
             <div className="space-y-4 pt-4 border-t">
                 <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold">Custom Prompts</h3>
+                    <h3 className="text-sm font-semibold">
+                        Modelos personalizados
+                    </h3>
                     <Button
                         onClick={() =>
                             setEditingCustomPrompt({ name: "", prompt: "" })
@@ -271,12 +273,12 @@ export function PromptManager() {
                         size="sm"
                     >
                         <Plus className="size-4 mr-2" />
-                        Add Custom Prompt
+                        Adicionar modelo
                     </Button>
                 </div>
                 {customPrompts.length === 0 ? (
                     <p className="text-sm text-muted-foreground text-center py-4">
-                        No custom prompts yet. Create one to get started.
+                        Nenhum modelo personalizado ainda. Crie um para começar.
                     </p>
                 ) : (
                     <div className="space-y-2">
@@ -293,7 +295,7 @@ export function PromptManager() {
                                             </h4>
                                             {selectedPromptId === prompt.id && (
                                                 <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded border border-primary/20">
-                                                    Active
+                                                    Ativo
                                                 </span>
                                             )}
                                         </div>
@@ -306,7 +308,7 @@ export function PromptManager() {
                                                 setViewingPromptId(prompt.id)
                                             }
                                         >
-                                            View
+                                            Ver
                                         </Button>
                                         <Button
                                             variant="outline"
@@ -371,8 +373,8 @@ export function PromptManager() {
                     <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
                         <DialogTitle>
                             {editingCustomPrompt.id
-                                ? "Edit Custom Prompt"
-                                : "Create Custom Prompt"}
+                                ? "Editar modelo personalizado"
+                                : "Criar modelo personalizado"}
                         </DialogTitle>
                         <DialogDescription>
                             Create a custom prompt for title generation. Use{" "}
@@ -383,7 +385,7 @@ export function PromptManager() {
                         </DialogDescription>
                         <div className="space-y-4 mt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="custom-prompt-name">Name</Label>
+                                <Label htmlFor="custom-prompt-name">Nome</Label>
                                 <Input
                                     id="custom-prompt-name"
                                     value={editingCustomPrompt.name}
@@ -397,12 +399,12 @@ export function PromptManager() {
                                                 : prev,
                                         )
                                     }
-                                    placeholder="My Custom Prompt"
+                                    placeholder="Meu modelo"
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="custom-prompt-text">
-                                    Prompt
+                                    Modelo
                                 </Label>
                                 <textarea
                                     id="custom-prompt-text"
@@ -443,7 +445,7 @@ Generate the title now:`}
                                     variant="outline"
                                     onClick={() => setEditingCustomPrompt(null)}
                                 >
-                                    Cancel
+                                    Cancelar
                                 </Button>
                                 <Button
                                     onClick={() => {
@@ -452,7 +454,7 @@ Generate the title now:`}
                                             !editingCustomPrompt.prompt
                                         ) {
                                             toast.error(
-                                                "Name and prompt are required",
+                                                "Nome e modelo são obrigatórios",
                                             );
                                             return;
                                         }
@@ -465,7 +467,9 @@ Generate the title now:`}
                                         !editingCustomPrompt.prompt
                                     }
                                 >
-                                    {editingCustomPrompt.id ? "Save" : "Create"}
+                                    {editingCustomPrompt.id
+                                        ? "Salvar"
+                                        : "Criar"}
                                 </Button>
                             </div>
                         </div>

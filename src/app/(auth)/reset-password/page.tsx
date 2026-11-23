@@ -32,12 +32,11 @@ export default async function ResetPasswordPage({
     const error = firstParam(params.error);
 
     const mode = resetPasswordMode(token, error);
-    const title =
-        mode === "invalid" ? "Invalid reset link" : "Set a new password";
+    const title = mode === "invalid" ? "Link inválido" : "Criar uma senha nova";
     const subtitle =
         mode === "invalid"
-            ? "This link is missing or has expired."
-            : "Choose a password you don't use anywhere else.";
+            ? "Este link está incompleto ou expirou."
+            : "Escolha uma senha que você não usa em outro lugar.";
 
     if (env.IS_HOSTED) {
         return (

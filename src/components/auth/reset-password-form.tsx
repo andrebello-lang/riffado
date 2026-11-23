@@ -43,13 +43,13 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
                 <div className="space-y-3 rounded-md border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
                     {error?.toUpperCase() === "INVALID_TOKEN" ? (
                         <p>
-                            The reset link has expired or has already been used.
-                            Request a new one to continue.
+                            O link expirou ou já foi usado. Peça um novo para
+                            continuar.
                         </p>
                     ) : (
                         <p>
-                            Open the most recent reset email and click the link
-                            from there, or request a new reset email.
+                            Abra o e-mail mais recente e clique no link de lá,
+                            ou peça um novo e-mail.
                         </p>
                     )}
                 </div>
@@ -59,7 +59,7 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
                         href="/forgot-password"
                         className="text-accent-cyan hover:underline"
                     >
-                        Request a new link
+                        Pedir um novo link
                     </Link>
                 </div>
             </div>
@@ -70,12 +70,12 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            toast.error("Passwords do not match");
+            toast.error("As senhas não são iguais");
             return;
         }
 
         if (password.length < 8) {
-            toast.error("Password must be at least 8 characters");
+            toast.error("A senha precisa ter pelo menos 8 caracteres");
             return;
         }
 
@@ -90,19 +90,19 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
             if (result.error) {
                 toast.error(
                     result.error.message ||
-                        "Could not reset password. The link may have expired.",
+                        "Não foi possível trocar a senha. O link pode ter expirado.",
                 );
                 return;
             }
 
-            toast.success("Password reset. You can sign in now.");
+            toast.success("Senha trocada. Já pode entrar.");
             push("/login");
             refresh();
         } catch (err) {
             const message =
                 err instanceof Error
                     ? err.message
-                    : "Could not reset password. The link may have expired.";
+                    : "Não foi possível trocar a senha. O link pode ter expirado.";
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -113,7 +113,7 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
         <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="password">New password</Label>
+                    <Label htmlFor="password">Nova senha</Label>
                     <Input
                         id="password"
                         type="password"
@@ -128,7 +128,7 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm password</Label>
+                    <Label htmlFor="confirmPassword">Confirmar senha</Label>
                     <Input
                         id="confirmPassword"
                         type="password"
@@ -147,7 +147,7 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
                     variant="cyan"
                     disabled={isLoading}
                 >
-                    {isLoading ? "Resetting..." : "Reset password"}
+                    {isLoading ? "Trocando..." : "Trocar senha"}
                 </MetalButton>
             </form>
 
@@ -156,7 +156,7 @@ export function ResetPasswordForm({ token, error }: ResetPasswordFormProps) {
                     href="/login"
                     className="text-accent-cyan hover:underline"
                 >
-                    Back to sign in
+                    Voltar para entrar
                 </Link>
             </div>
         </div>

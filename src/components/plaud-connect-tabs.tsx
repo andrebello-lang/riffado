@@ -104,16 +104,16 @@ export function PlaudConnectTabs({ onConnected }: PlaudConnectTabsProps) {
     const [mode, setMode] = useState<Mode>("connector");
 
     const tabs: { key: Mode; label: string }[] = [
-        { key: "connector", label: "Sign in with Plaud" },
-        { key: "email", label: "Email code" },
-        { key: "token", label: "Paste token" },
+        { key: "connector", label: "Entrar com o Plaud" },
+        { key: "email", label: "Código por e-mail" },
+        { key: "token", label: "Colar token" },
     ];
 
     return (
         <div className="space-y-4">
             <div
                 role="tablist"
-                aria-label="Plaud connection method"
+                aria-label="Forma de conectar o Plaud"
                 className="grid grid-cols-3 gap-1 p-1 rounded-md bg-muted/50 border"
             >
                 {tabs.map((t) => (
@@ -177,7 +177,7 @@ function ConnectorPane({
     const handleConnect = useCallback(async () => {
         const bridge = window.__riffadoConnector;
         if (!bridge) {
-            toast.error("Connector extension not detected");
+            toast.error("Extensão Riffado Connector não encontrada");
             return;
         }
         setIsLoading(true);
@@ -198,17 +198,19 @@ function ConnectorPane({
             });
             if (!res.ok) {
                 await toastApiError(res, {
-                    fallback: "Failed to connect Plaud",
+                    fallback: "Não foi possível conectar o Plaud",
                     errorContext: "connect Plaud via connector extension",
                 });
                 return;
             }
-            toast.success("Plaud account connected");
+            toast.success("Conta do Plaud conectada");
             await toastConnectWarning(res);
             onConnected();
         } catch (err) {
             toast.error(
-                err instanceof Error ? err.message : "Failed to connect",
+                err instanceof Error
+                    ? err.message
+                    : "Não foi possível conectar",
             );
         } finally {
             setIsLoading(false);
@@ -234,7 +236,7 @@ function ConnectorPane({
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        Install Riffado Connector
+                        Instalar o Riffado Connector
                     </a>
                 </Button>
                 <p className="text-xs text-muted-foreground/80 leading-relaxed">
@@ -274,8 +276,8 @@ function ConnectorPane({
                 className="w-full"
             >
                 {isLoading
-                    ? "Waiting for plaud.ai sign-in…"
-                    : "Continue with Plaud"}
+                    ? "Aguardando o login no plaud.ai…"
+                    : "Continuar com o Plaud"}
             </Button>
             <p className="text-xs text-muted-foreground/80 leading-relaxed">
                 Stuck?{" "}
@@ -284,7 +286,7 @@ function ConnectorPane({
                     onClick={onUseEmail}
                     className="underline decoration-dotted underline-offset-2 hover:text-muted-foreground"
                 >
-                    Use email code
+                    Usar código por e-mail
                 </button>{" "}
                 or{" "}
                 <button
@@ -319,7 +321,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
     const handleSendCode = useCallback(async () => {
         const trimmed = email.trim();
         if (!trimmed) {
-            toast.error("Please enter your Plaud email");
+            toast.error("Informe seu e-mail do Plaud");
             return;
         }
         const now = Date.now();
@@ -327,7 +329,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
             const secs = Math.ceil(
                 (RESEND_COOLDOWN_MS - (now - lastSentAt)) / 1000,
             );
-            toast.error(`Please wait ${secs}s before resending`);
+            toast.error(`Aguarde ${secs} s para reenviar`);
             return;
         }
         setIsLoading(true);
@@ -339,7 +341,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
             });
             if (!res.ok) {
                 await toastApiError(res, {
-                    fallback: "Failed to send code",
+                    fallback: "Não foi possível enviar o código",
                     errorContext: "send Plaud verification code",
                 });
                 return;
@@ -349,10 +351,12 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
             setApiBase(data.apiBase);
             setLastSentAt(Date.now());
             setStep("code");
-            toast.success("Verification code sent. Check your email.");
+            toast.success("Código enviado. Confira seu e-mail.");
         } catch (err) {
             toast.error(
-                err instanceof Error ? err.message : "Failed to send code",
+                err instanceof Error
+                    ? err.message
+                    : "Não foi possível enviar o código",
             );
         } finally {
             setIsLoading(false);
@@ -362,7 +366,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
     const handleVerify = useCallback(async () => {
         const trimmed = code.trim();
         if (!trimmed) {
-            toast.error("Please enter the verification code");
+            toast.error("Informe o código de verificação");
             return;
         }
         setIsLoading(true);
@@ -379,16 +383,16 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
             });
             if (!res.ok) {
                 await toastApiError(res, {
-                    fallback: "Verification failed",
+                    fallback: "Falha na verificação",
                     errorContext: "verify Plaud OTP code",
                 });
                 return;
             }
-            toast.success("Plaud account connected");
+            toast.success("Conta do Plaud conectada");
             onConnected();
         } catch (err) {
             toast.error(
-                err instanceof Error ? err.message : "Verification failed",
+                err instanceof Error ? err.message : "Falha na verificação",
             );
         } finally {
             setIsLoading(false);
@@ -399,7 +403,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
         return (
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="plaud-email">Plaud Email</Label>
+                    <Label htmlFor="plaud-email">E-mail do Plaud</Label>
                     <Input
                         id="plaud-email"
                         type="email"
@@ -423,8 +427,8 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
                     className="w-full"
                 >
                     {isLoading
-                        ? "Sending code via plaud.ai…"
-                        : "Send Verification Code"}
+                        ? "Enviando o código pelo plaud.ai…"
+                        : "Enviar código"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground/80 leading-relaxed">
@@ -437,7 +441,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
                         onClick={onUseConnector}
                         className="underline decoration-dotted underline-offset-2 hover:text-muted-foreground transition-colors"
                     >
-                        Use Sign in with Plaud instead.
+                        Use Entrar com o Plaud.
                     </button>{" "}
                     <a
                         href={ISSUE_URL}
@@ -455,7 +459,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
     return (
         <div className="space-y-4">
             <div className="space-y-2">
-                <Label htmlFor="otp-code">Verification Code</Label>
+                <Label htmlFor="otp-code">Código de verificação</Label>
                 <Input
                     id="otp-code"
                     type="text"
@@ -481,7 +485,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
                 disabled={isLoading || !code.trim()}
                 className="w-full"
             >
-                {isLoading ? "Verifying with plaud.ai…" : "Connect Account"}
+                {isLoading ? "Verificando no plaud.ai…" : "Conectar conta"}
             </Button>
 
             <div className="flex items-center justify-between text-xs text-muted-foreground/70">
@@ -501,7 +505,7 @@ function EmailCodePane({ onConnected, onUseConnector }: EmailCodePaneProps) {
                     disabled={isLoading}
                     className="underline decoration-dotted underline-offset-2 hover:text-muted-foreground transition-colors disabled:opacity-50"
                 >
-                    Resend code
+                    Reenviar código
                 </button>
             </div>
         </div>
@@ -537,11 +541,11 @@ function PasteTokenPane({
     const handleSubmit = useCallback(async () => {
         const trimmed = token.trim().replace(/^Bearer\s+/i, "");
         if (!trimmed) {
-            toast.error("Paste your Plaud access token first");
+            toast.error("Cole o token de acesso do Plaud primeiro");
             return;
         }
         if (serverKey === "custom" && !apiBase) {
-            toast.error("Enter your custom Plaud API URL");
+            toast.error("Informe a URL da API do Plaud");
             return;
         }
         setIsLoading(true);
@@ -557,17 +561,19 @@ function PasteTokenPane({
             });
             if (!res.ok) {
                 await toastApiError(res, {
-                    fallback: "Failed to connect Plaud",
+                    fallback: "Não foi possível conectar o Plaud",
                     errorContext: "connect Plaud via pasted access token",
                 });
                 return;
             }
-            toast.success("Plaud account connected");
+            toast.success("Conta do Plaud conectada");
             await toastConnectWarning(res);
             onConnected();
         } catch (err) {
             toast.error(
-                err instanceof Error ? err.message : "Failed to connect Plaud",
+                err instanceof Error
+                    ? err.message
+                    : "Não foi possível conectar o Plaud",
             );
         } finally {
             setIsLoading(false);
@@ -620,7 +626,7 @@ function PasteTokenPane({
             </p>
 
             <div className="space-y-2">
-                <Label htmlFor="plaud-region">Plaud region</Label>
+                <Label htmlFor="plaud-region">Região do Plaud</Label>
                 <select
                     id="plaud-region"
                     value={serverKey}
@@ -656,7 +662,7 @@ function PasteTokenPane({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="plaud-access-token">Access token</Label>
+                <Label htmlFor="plaud-access-token">Token de acesso</Label>
                 <textarea
                     id="plaud-access-token"
                     placeholder="eyJhbGciOi…"
@@ -676,7 +682,7 @@ function PasteTokenPane({
                 disabled={isLoading || !token.trim()}
                 className="w-full"
             >
-                {isLoading ? "Validating with plaud.ai…" : "Connect with token"}
+                {isLoading ? "Validando no plaud.ai…" : "Conectar com token"}
             </Button>
 
             <details className="group">

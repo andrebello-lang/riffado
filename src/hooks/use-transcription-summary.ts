@@ -243,21 +243,21 @@ export function useTranscriptionSummary({
                     setSummaryData(data);
                     if (data.promptFallback) {
                         toast.warning(
-                            "Selected summary prompt is no longer available -- used your default prompt instead.",
+                            "O modelo de resumo escolhido não existe mais. Usei o seu modelo padrão.",
                         );
                     } else {
-                        toast.success("Summary generated");
+                        toast.success("Resumo gerado");
                     }
                 }
             } else {
                 const error = await response.json().catch(() => ({}));
                 if (postIsCurrent()) {
-                    toast.error(error.error || "Summary generation failed");
+                    toast.error(error.error || "Falha ao gerar o resumo");
                 }
             }
         } catch {
             if (postIsCurrent()) {
-                toast.error("Failed to generate summary");
+                toast.error("Não foi possível gerar o resumo");
             }
         } finally {
             summarizingIdsRef.current = removeSummarizingId(
@@ -285,18 +285,18 @@ export function useTranscriptionSummary({
             );
             if (response.ok) {
                 if (deleteIsCurrent()) {
-                    toast.success("Summary deleted");
+                    toast.success("Resumo excluído");
                 }
             } else {
                 if (deleteIsCurrent()) {
                     setSummaryData(previous);
-                    toast.error("Failed to delete summary");
+                    toast.error("Não foi possível excluir o resumo");
                 }
             }
         } catch {
             if (deleteIsCurrent()) {
                 setSummaryData(previous);
-                toast.error("Failed to delete summary");
+                toast.error("Não foi possível excluir o resumo");
             }
         }
     }, [recordingId, summaryData]);

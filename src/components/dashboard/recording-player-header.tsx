@@ -82,7 +82,7 @@ export function RecordingPlayerHeader({
             </div>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
                 <span>
-                    Recorded{" "}
+                    Capturada em{" "}
                     <LocalTimeRange
                         start={recording.startTime}
                         durationMs={recording.duration}
@@ -103,7 +103,7 @@ export function RecordingPlayerHeader({
                                 ·
                             </span>
                             <Loader2 className="size-3 animate-spin" />
-                            Analyzing audio…
+                            Analisando o áudio…
                         </span>
                     )}
                 {scrubberStyle === "waveform" &&
@@ -112,13 +112,13 @@ export function RecordingPlayerHeader({
                             type="button"
                             onClick={onDecodeWaveform}
                             className="inline-flex items-center gap-1 underline-offset-2 hover:text-foreground hover:underline"
-                            title="Decode waveform in your browser (may take a few seconds)"
+                            title="Gerar a forma de onda no navegador (pode levar alguns segundos)"
                         >
                             <span aria-hidden="true" className="opacity-40">
                                 ·
                             </span>
                             <AudioWaveform className="size-3" />
-                            Generate waveform
+                            Gerar forma de onda
                         </button>
                     )}
                 {scrubberStyle === "waveform" && waveformStatus === "error" && (
@@ -131,7 +131,7 @@ export function RecordingPlayerHeader({
                             ·
                         </span>
                         <AudioWaveform className="size-3" />
-                        Retry waveform
+                        Tentar de novo
                     </button>
                 )}
             </div>

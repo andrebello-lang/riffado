@@ -130,7 +130,9 @@ export function PlaybackSection() {
                         setPlayerScrubber(prev);
                     }
                 }
-                toast.error("Failed to save settings. Changes reverted.");
+                toast.error(
+                    "Não foi possível salvar. As mudanças foram desfeitas.",
+                );
             }
         };
 
@@ -150,28 +152,28 @@ export function PlaybackSection() {
     }
 
     const shortcuts: { keys: string; description: string }[] = [
-        { keys: "Space", description: "Play / pause" },
-        { keys: "←", description: "Seek backward 5s" },
-        { keys: "→", description: "Seek forward 5s" },
-        { keys: "↑", description: "Increase volume" },
-        { keys: "↓", description: "Decrease volume" },
+        { keys: "Space", description: "Tocar / pausar" },
+        { keys: "←", description: "Voltar 5 s" },
+        { keys: "→", description: "Avançar 5 s" },
+        { keys: "↑", description: "Aumentar volume" },
+        { keys: "↓", description: "Diminuir volume" },
     ];
 
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Playback"
-                description="Defaults applied to every recording when it loads in the player."
+                title="Reprodução"
+                description="Padrões aplicados a cada captura quando ela abre no player."
                 icon={Play}
             />
 
             <div className="space-y-3">
                 {/* Speed + volume defaults grouped — the audio knobs that
                     apply at the moment a recording is selected. */}
-                <SettingsCard title="Audio defaults">
+                <SettingsCard title="Padrões de áudio">
                     <div className="space-y-2">
                         <Label htmlFor="playback-speed">
-                            Default playback speed
+                            Velocidade padrão
                         </Label>
                         <Select
                             value={defaultPlaybackSpeed.toString()}
@@ -211,7 +213,7 @@ export function PlaybackSection() {
                     <div className="space-y-2">
                         <div className="flex items-center justify-between">
                             <Label htmlFor="default-volume">
-                                Default volume
+                                Volume padrão
                             </Label>
                             <span className="font-mono text-xs tabular-nums text-muted-foreground">
                                 {defaultVolume}%
@@ -237,11 +239,11 @@ export function PlaybackSection() {
 
                 {/* Behavior toggles — things that change what the player
                     does, not what it sounds like. */}
-                <SettingsCard title="Behavior">
+                <SettingsCard title="Comportamento">
                     <ToggleRow
                         id="auto-play-next"
-                        label="Auto-play next recording"
-                        description="Automatically play the next recording when the current one ends."
+                        label="Tocar a próxima captura"
+                        description="Ao terminar uma captura, toca a próxima automaticamente."
                         checked={autoPlayNext}
                         onCheckedChange={(checked) => {
                             setAutoPlayNext(checked);
@@ -254,14 +256,14 @@ export function PlaybackSection() {
                 </SettingsCard>
 
                 {/* Visual appearance of the player itself. */}
-                <SettingsCard title="Appearance">
+                <SettingsCard title="Aparência">
                     <div className="space-y-2">
                         <Label
                             htmlFor="player-scrubber"
                             className="flex items-center gap-2"
                         >
                             <AudioWaveform className="size-4 text-muted-foreground" />
-                            Scrubber style
+                            Estilo da linha do tempo
                         </Label>
                         <Select
                             value={playerScrubber}
@@ -282,17 +284,17 @@ export function PlaybackSection() {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="waveform">
-                                    Waveform (default)
+                                    Forma de onda (padrão)
                                 </SelectItem>
                                 <SelectItem value="slider">
-                                    Progress bar
+                                    Barra de progresso
                                 </SelectItem>
                             </SelectContent>
                         </Select>
                         <p className="text-xs text-muted-foreground">
-                            Waveform shows audio amplitude and decodes
-                            in-browser on first listen. Progress bar is the
-                            plain horizontal slider with no decoding cost.
+                            A forma de onda mostra a intensidade do áudio e é
+                            gerada no navegador na primeira vez. A barra de
+                            progresso é mais simples e não precisa disso.
                         </p>
                     </div>
                 </SettingsCard>
@@ -306,10 +308,10 @@ export function PlaybackSection() {
                                 className="size-4 text-muted-foreground"
                                 aria-hidden="true"
                             />
-                            Keyboard shortcuts
+                            Atalhos de teclado
                         </span>
                     }
-                    description="Available when the player has focus."
+                    description="Funcionam quando o player está em foco."
                 >
                     <ul className="space-y-1.5">
                         {shortcuts.map((s) => (

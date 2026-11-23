@@ -128,10 +128,10 @@ export function CommandPalette({
                 className="max-w-xl gap-0 overflow-hidden p-0"
                 showCloseButton={false}
             >
-                <DialogTitle className="sr-only">Command palette</DialogTitle>
+                <DialogTitle className="sr-only">Busca e comandos</DialogTitle>
                 <Command
                     className="command-palette"
-                    label="Command palette"
+                    label="Busca e comandos"
                     value={activeValue}
                     onValueChange={setActiveValue}
                     onKeyDownCapture={handleKeyDownCapture}
@@ -141,15 +141,15 @@ export function CommandPalette({
                             className="cmd-input-icon size-4"
                             aria-hidden="true"
                         />
-                        <Command.Input placeholder="Search recordings, transcripts, or actions…" />
+                        <Command.Input placeholder="Buscar capturas, transcrições ou ações…" />
                         <Kbd>⌘K</Kbd>
                     </div>
 
                     <Command.List className="max-h-[60vh] overflow-y-auto p-2">
                         <Command.Empty>
-                            No matches.
+                            Nada encontrado.
                             <div className="cmd-empty-hint">
-                                Try searching by something you talked about.
+                                Tente buscar por algo que foi dito.
                             </div>
                         </Command.Empty>
 

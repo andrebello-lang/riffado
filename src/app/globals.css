@@ -26,6 +26,7 @@
     --ring: #202020;
     --highlight: #f2e86d;
     --highlight-foreground: #202020;
+    --highlight-mark: #f2e86d;
     --chart-1: #202020;
     --chart-2: #626262;
     --chart-3: #bdbdbd;
@@ -122,6 +123,7 @@
     --ring: #f2f2f2;
     --highlight: #e3d75a;
     --highlight-foreground: #161616;
+    --highlight-mark: rgb(227 215 90 / 0.28);
     --chart-1: #f2f2f2;
     --chart-2: #a8a8a8;
     --chart-3: #626262;
@@ -398,6 +400,20 @@
     .metal-button:active {
         box-shadow: var(--shadow-xs);
         transform: translateY(1px);
+    }
+
+    /* Brieffado: primary action, graphite pill. */
+    .metal-button.metal-button-primary {
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border-color: var(--primary);
+        box-shadow: none;
+    }
+
+    .metal-button.metal-button-primary:hover {
+        background: color-mix(in oklab, var(--primary) 88%, var(--background));
+        border-color: var(--primary);
+        box-shadow: none;
     }
 
     .led-indicator {

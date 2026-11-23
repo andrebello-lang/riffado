@@ -57,10 +57,8 @@ export function RecordingRow({
     return (
         <div
             className={cn(
-                "group/row relative",
-                isSelected
-                    ? "bg-accent shadow-[inset_2px_0_0_0_var(--color-primary)]"
-                    : null,
+                "group/row relative rounded-xl border bg-card transition-colors",
+                isSelected ? "border-foreground" : "border-border",
             )}
         >
             <button
@@ -76,13 +74,13 @@ export function RecordingRow({
                     e.dataTransfer.effectAllowed = "move";
                 }}
                 className={cn(
-                    "w-full text-left transition-colors hover:bg-accent/60",
+                    "w-full rounded-xl text-left transition-colors hover:bg-accent/40",
                     rowPadding,
                 )}
             >
                 <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                        <h3 className="truncate text-sm font-medium">
+                        <h3 className="truncate text-sm font-semibold">
                             {recording.filename}
                         </h3>
                         {inFlight && (
@@ -92,8 +90,8 @@ export function RecordingRow({
                                     aria-hidden="true"
                                 />
                                 {inFlight === "transcribing"
-                                    ? "Transcribing"
-                                    : "Summarizing"}
+                                    ? "Transcrevendo"
+                                    : "Resumindo"}
                             </span>
                         )}
                     </div>
@@ -133,7 +131,7 @@ export function RecordingRow({
                         <Button
                             variant="ghost"
                             size="icon-sm"
-                            aria-label="Row actions"
+                            aria-label="Ações da captura"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <MoreHorizontal className="size-4" />
@@ -142,7 +140,7 @@ export function RecordingRow({
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onSelect={() => onSelect(recording)}>
                             <Play />
-                            Open
+                            Abrir
                         </DropdownMenuItem>
                         <DropdownMenuItem
                             onSelect={() => {
@@ -152,7 +150,7 @@ export function RecordingRow({
                             }}
                         >
                             <Download />
-                            Download audio
+                            Baixar áudio
                         </DropdownMenuItem>
                         {library && (
                             <DropdownMenuItem
@@ -171,21 +169,20 @@ export function RecordingRow({
                                 // Keep menu mounted so confirm dialog can take focus.
                                 e.preventDefault();
                                 void confirm({
-                                    title: "Delete this recording?",
+                                    title: "Excluir esta captura?",
                                     description: (
                                         <>
                                             <span className="font-medium text-foreground">
                                                 {recording.filename}
                                             </span>
-                                            <br />
-                                            The audio file and any transcript or
-                                            summary will be removed. If the file
-                                            is still on your Plaud device, the
-                                            next sync will re-download it.
+                                            <br />O áudio, a transcrição e o
+                                            resumo serão apagados. Se o arquivo
+                                            ainda estiver no seu Plaud, a
+                                            próxima sincronização baixa de novo.
                                         </>
                                     ),
-                                    confirmLabel: "Delete",
-                                    pendingLabel: "Deleting…",
+                                    confirmLabel: "Excluir",
+                                    pendingLabel: "Excluindo…",
                                     destructive: true,
                                     onConfirm: () => onDelete(recording),
                                 });

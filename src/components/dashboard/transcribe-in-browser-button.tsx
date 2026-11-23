@@ -25,10 +25,10 @@ type Phase =
     | "transcribing";
 
 const PHASE_LABEL: Record<Exclude<Phase, "idle">, string> = {
-    "downloading-audio": "Downloading audio…",
-    "decoding-audio": "Decoding audio…",
-    "loading-model": "Loading Whisper (one-time download)…",
-    transcribing: "Transcribing locally…",
+    "downloading-audio": "Baixando o áudio…",
+    "decoding-audio": "Decodificando o áudio…",
+    "loading-model": "Carregando o Whisper (download único)…",
+    transcribing: "Transcrevendo no computador…",
 };
 
 /**
@@ -57,7 +57,7 @@ export function TranscribeInBrowserButton({
                 `/api/recordings/${recordingId}/audio`,
             );
             if (!audioRes.ok) {
-                throw new Error(`Failed to fetch audio (${audioRes.status})`);
+                throw new Error(`Falha ao baixar o áudio (${audioRes.status})`);
             }
             const blob = await audioRes.blob();
             const file = new File([blob], `recording-${recordingId}`, {
@@ -85,16 +85,16 @@ export function TranscribeInBrowserButton({
             );
             if (!postRes.ok) {
                 const err = await postRes.json().catch(() => ({}));
-                throw new Error(err.error ?? "Failed to save transcription");
+                throw new Error(err.error ?? "Falha ao salvar a transcrição");
             }
 
-            toast.success("Transcribed in browser");
+            toast.success("Transcrito no navegador");
             onComplete();
         } catch (err) {
             toast.error(
                 err instanceof Error
                     ? err.message
-                    : "Browser transcription failed",
+                    : "Falha na transcrição pelo navegador",
             );
         } finally {
             setPhase("idle");
@@ -109,7 +109,7 @@ export function TranscribeInBrowserButton({
             size="sm"
             variant="outline"
             disabled={disabled || busy}
-            title="Run Whisper in your browser. No API key required; audio never leaves your machine."
+            title="Roda o Whisper no navegador. Não precisa de chave de API e o áudio não sai do seu computador."
         >
             {busy ? (
                 <>
@@ -119,7 +119,7 @@ export function TranscribeInBrowserButton({
             ) : (
                 <>
                     <Cpu className="size-4 mr-2" />
-                    Transcribe in browser
+                    Transcrever no navegador
                 </>
             )}
         </Button>

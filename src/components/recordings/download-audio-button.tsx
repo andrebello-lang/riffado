@@ -18,14 +18,14 @@ export function DownloadAudioButton({ recordingId }: { recordingId: string }) {
                         href={recordingAudioDownloadPath(recordingId)}
                         download
                         rel="nofollow noreferrer"
-                        aria-label="Download original audio"
+                        aria-label="Baixar o áudio original"
                     >
                         <Download className="size-4" />
                     </a>
                 </Button>
             </TooltipTrigger>
             <TooltipContent side="bottom">
-                Download original audio
+                Baixar o áudio original
             </TooltipContent>
         </Tooltip>
     );

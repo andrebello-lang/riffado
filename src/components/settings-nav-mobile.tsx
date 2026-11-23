@@ -43,10 +43,10 @@ export function SettingsNavMobile({
             >
                 <SelectTrigger
                     className="w-[180px]"
-                    aria-label="Select settings section"
+                    aria-label="Escolher seção das configurações"
                 >
                     <SelectValue>
-                        {activeNavItem?.name || "Settings"}
+                        {activeNavItem?.name || "Configurações"}
                     </SelectValue>
                 </SelectTrigger>
                 <SelectContent>

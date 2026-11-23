@@ -1,8 +1,8 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+import { CapturePanel } from "@/components/capture/capture-panel";
 import { RecordingPlayer } from "@/components/dashboard/recording-player";
-import { TranscriptionPanel } from "@/components/dashboard/transcription-panel";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -61,7 +61,7 @@ export function WorkstationDetailPane({
     return (
         <div
             className={cn(
-                "space-y-6 lg:sticky lg:top-[4.5rem] lg:col-span-2 lg:block lg:max-h-[calc(100vh-5rem)] lg:self-start lg:overflow-y-auto lg:pr-1",
+                "min-w-0 space-y-6 lg:sticky lg:top-[4.5rem] lg:block lg:max-h-[calc(100vh-5rem)] lg:self-start lg:overflow-y-auto lg:pr-1",
                 hiddenOnMobile && "hidden",
             )}
         >
@@ -78,7 +78,7 @@ export function WorkstationDetailPane({
                 className="-ml-2 h-9 gap-1 px-2 lg:hidden"
             >
                 <ArrowLeft className="size-4" />
-                Back to recordings
+                Voltar às capturas
             </Button>
             {currentRecording ? (
                 <>
@@ -103,7 +103,7 @@ export function WorkstationDetailPane({
                             }
                         }}
                     />
-                    <TranscriptionPanel
+                    <CapturePanel
                         recording={currentRecording}
                         transcription={currentTranscription}
                         isTranscribing={isCurrentTranscribing}
@@ -115,7 +115,8 @@ export function WorkstationDetailPane({
                 <Card>
                     <CardContent className="py-16 text-center">
                         <p className="text-muted-foreground">
-                            Select a recording to view details and transcription
+                            Escolha uma captura para ver os detalhes e a
+                            transcrição
                         </p>
                     </CardContent>
                 </Card>

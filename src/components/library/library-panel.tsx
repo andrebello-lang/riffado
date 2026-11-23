@@ -312,7 +312,13 @@ function FolderNode({
  * Enviadas) plus the user's nested, colored folders. Selecting an entry
  * filters the recording list; recordings can be dropped onto folders.
  */
-export function LibraryPanel() {
+export function LibraryPanel({
+    variant = "card",
+}: {
+    /** "sidebar": flat column for the desktop layout; "card": stacked above the list. */
+    variant?: "card" | "sidebar";
+} = {}) {
+    const isSidebar = variant === "sidebar";
     const lib = useLibrary();
     const [collapsed, setCollapsed] = useState(false);
     const [expanded, setExpanded] = useState<Set<string>>(new Set());
@@ -352,7 +358,12 @@ export function LibraryPanel() {
             : null;
 
     return (
-        <Card className="mb-4 gap-0 py-3">
+        <Card
+            className={cn(
+                "mb-4 gap-0 py-3",
+                isSidebar && "mb-0 border-0 bg-transparent py-0 shadow-none",
+            )}
+        >
             <div className="flex items-center gap-1 px-3 pb-1">
                 <button
                     type="button"
@@ -365,7 +376,13 @@ export function LibraryPanel() {
                     ) : (
                         <ChevronDown className="size-4 text-muted-foreground" />
                     )}
-                    <span className="text-base font-semibold">
+                    <span
+                        className={cn(
+                            "text-base font-semibold",
+                            isSidebar &&
+                                "text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase",
+                        )}
+                    >
                         Meus arquivos
                     </span>
                     {collapsed && activeFolderName && (
@@ -386,12 +403,17 @@ export function LibraryPanel() {
             </div>
 
             {!collapsed && (
-                <div className="max-h-[45vh] space-y-0.5 overflow-y-auto px-2">
+                <div
+                    className={cn(
+                        "space-y-0.5 px-2",
+                        !isSidebar && "max-h-[45vh] overflow-y-auto",
+                    )}
+                >
                     <ViewRow
                         icon={
                             <Layers className="size-4 text-muted-foreground" />
                         }
-                        label="Todas as gravações"
+                        label="Todas as capturas"
                         count={lib.countFor({ kind: "all" })}
                         active={lib.view.kind === "all"}
                         onClick={() => lib.setView({ kind: "all" })}

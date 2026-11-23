@@ -94,7 +94,7 @@ export function Footer() {
                             href="/docs"
                             className="hover:text-foreground transition-colors"
                         >
-                            Docs
+                            Documentação
                         </Link>
                         {/* Single bug-report entry point for both modes.
                             Self-host → GitHub-only dialog. Hosted →

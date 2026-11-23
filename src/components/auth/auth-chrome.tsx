@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { BrieffadoWordmark } from "@/components/brand/brieffado-logo";
 import { LogoWordmark } from "@/components/icons/logo";
-import { Panel } from "@/components/panel";
 import { BRIEFFADO_SOURCE_URL } from "@/lib/brand";
 
 interface AuthChromeProps {
@@ -176,16 +175,52 @@ export function SelfHostAuthChrome({
     children,
 }: AuthChromeProps) {
     return (
-        <div className="relative flex min-h-screen items-center justify-center px-4 py-12">
-            <div className="relative z-10 w-full max-w-md space-y-6">
-                <div className="flex justify-center">
-                    <Link href="/" aria-label="Brieffado">
+        <div className="grid min-h-screen bg-background lg:grid-cols-2">
+            <aside className="hidden flex-col justify-between gap-10 border-r border-border bg-card p-14 lg:flex">
+                <Link href="/" aria-label="Brieffado" className="self-start">
+                    <BrieffadoWordmark className="text-3xl text-foreground" />
+                </Link>
+                <div className="max-w-md space-y-7">
+                    <p className="font-display text-5xl font-bold leading-[1.08] tracking-tight text-foreground">
+                        Seu segundo cérebro para{" "}
+                        <span className="bg-[linear-gradient(transparent_58%,var(--highlight-mark)_58%)]">
+                            reuniões, aulas e ideias
+                        </span>
+                        .
+                    </p>
+                    <ul className="space-y-4 text-[15px] leading-relaxed text-muted-foreground">
+                        <li>
+                            <strong className="text-foreground">Capture</strong>{" "}
+                            reuniões, aulas e apresentações.
+                        </li>
+                        <li>
+                            <strong className="text-foreground">
+                                Organize
+                            </strong>{" "}
+                            em pastas, como no seu gravador.
+                        </li>
+                        <li>
+                            <strong className="text-foreground">
+                                Não esqueça nada:
+                            </strong>{" "}
+                            ideias, tópicos e tarefas de cada conversa.
+                        </li>
+                    </ul>
+                </div>
+                <InstanceFooter />
+            </aside>
+
+            <main className="flex items-center justify-center px-6 py-12">
+                <div className="w-full max-w-sm space-y-7">
+                    <Link
+                        href="/"
+                        aria-label="Brieffado"
+                        className="inline-block lg:hidden"
+                    >
                         <BrieffadoWordmark className="text-3xl text-foreground" />
                     </Link>
-                </div>
-                <Panel className="space-y-6">
                     <div className="space-y-1.5">
-                        <h1 className="text-xl font-semibold tracking-tight">
+                        <h1 className="font-display text-3xl font-bold tracking-tight">
                             {title}
                         </h1>
                         {subtitle ? (
@@ -195,17 +230,19 @@ export function SelfHostAuthChrome({
                         ) : null}
                     </div>
                     {children}
-                </Panel>
-                <InstanceFooter />
-            </div>
+                    <div className="lg:hidden">
+                        <InstanceFooter />
+                    </div>
+                </div>
+            </main>
         </div>
     );
 }
 
 function InstanceFooter() {
     return (
-        <div className="flex justify-center text-xs text-muted-foreground font-mono">
-            <div className="flex items-center gap-4">
+        <div className="text-xs text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span>
                     Baseado no{" "}
                     <Link

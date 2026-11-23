@@ -80,7 +80,10 @@ export function PlaudAccountSection({
             const res = await fetch("/api/plaud/connection");
             if (!res.ok) {
                 throw new Error(
-                    await getApiErrorMessage(res, "Failed to load connection"),
+                    await getApiErrorMessage(
+                        res,
+                        "Não foi possível carregar a conexão",
+                    ),
                 );
             }
             const data: ConnectionInfo = await res.json();
@@ -110,12 +113,14 @@ export function PlaudAccountSection({
         setIsMutating(true);
         try {
             await disconnect();
-            toast.success("Plaud account disconnected");
+            toast.success("Conta do Plaud desconectada");
             setConfirmOpen(null);
             await fetchConnection();
         } catch (error) {
             toast.error(
-                error instanceof Error ? error.message : "Failed to disconnect",
+                error instanceof Error
+                    ? error.message
+                    : "Não foi possível desconectar",
             );
         } finally {
             setIsMutating(false);
@@ -142,7 +147,7 @@ export function PlaudAccountSection({
             toast.error(
                 error instanceof Error
                     ? error.message
-                    : "Failed to unlink current account",
+                    : "Não foi possível desvincular a conta atual",
             );
         } finally {
             setIsMutating(false);
@@ -186,14 +191,14 @@ export function PlaudAccountSection({
         <div className="space-y-6">
             <div>
                 <SettingsSectionHeader
-                    title="Plaud Account"
-                    description="Your connection to the Plaud cloud used to pull recordings."
+                    title="Conta do Plaud"
+                    description="A conexão com a nuvem do Plaud de onde vêm as gravações."
                     icon={Mic}
                 />
                 <p className="text-sm text-muted-foreground mt-1">
-                    The Plaud account Riffado pulls recordings from. Switching
-                    accounts keeps your existing recordings; only future syncs
-                    change.
+                    A conta do Plaud de onde o Brieffado puxa as gravações.
+                    Trocar de conta mantém as capturas que já estão aqui; só as
+                    próximas sincronizações mudam.
                 </p>
             </div>
 
@@ -210,26 +215,26 @@ export function PlaudAccountSection({
                                         </span>
                                     ) : (
                                         <span className="text-muted-foreground">
-                                            Connected (email unknown)
+                                            Conectado (e-mail desconhecido)
                                         </span>
                                     )}
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Region:{" "}
+                                    Região:{" "}
                                     {regionLabel(info.server, info.apiBase)}
                                     {!currentEmail && (
                                         <>
                                             {" · "}
                                             <span>
-                                                Use “Switch account” below to
-                                                display the email
+                                                Use "Trocar de conta" abaixo
+                                                para ver o e-mail
                                             </span>
                                         </>
                                     )}
                                 </p>
                                 {sessionEndsOn && connectionState === null && (
                                     <p className="text-sm text-muted-foreground">
-                                        Connected until {sessionEndsOn}
+                                        Conectado até {sessionEndsOn}
                                     </p>
                                 )}
                             </div>
@@ -237,15 +242,16 @@ export function PlaudAccountSection({
 
                         {connectionState === "reconnect" && (
                             <p className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-500">
-                                Plaud stopped accepting this sign-in, so syncing
-                                is paused. Reconnect to resume. Your recordings
-                                stay put.
+                                O Plaud deixou de aceitar este login, então a
+                                sincronização está parada. Reconecte para
+                                voltar. Suas capturas ficam.
                             </p>
                         )}
                         {connectionState === "ending-soon" && (
                             <p className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-700 dark:text-amber-500">
-                                Your Plaud connection ends on {sessionEndsOn}.
-                                Reconnect to keep syncing.
+                                Sua conexão com o Plaud termina em{" "}
+                                {sessionEndsOn}. Reconecte para continuar
+                                sincronizando.
                             </p>
                         )}
 
@@ -255,7 +261,7 @@ export function PlaudAccountSection({
                                     onClick={() => setReconnectDialogOpen(true)}
                                 >
                                     <RefreshCw className="size-4 mr-2" />
-                                    Reconnect
+                                    Reconectar
                                 </Button>
                             )}
                             <Button
@@ -263,7 +269,7 @@ export function PlaudAccountSection({
                                 onClick={() => setConfirmOpen("switch")}
                             >
                                 <RefreshCw className="size-4 mr-2" />
-                                Switch account
+                                Trocar de conta
                             </Button>
                             <Button
                                 variant="ghost"
@@ -271,7 +277,7 @@ export function PlaudAccountSection({
                                 className="text-destructive hover:text-destructive hover:bg-destructive/10"
                             >
                                 <Link2Off className="size-4 mr-2" />
-                                Disconnect
+                                Desconectar
                             </Button>
                         </div>
                     </CardContent>
@@ -280,8 +286,8 @@ export function PlaudAccountSection({
                 <Card className="py-4">
                     <CardContent className="space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            No Plaud account connected. Sign in below to start
-                            syncing recordings.
+                            Nenhuma conta do Plaud conectada. Entre abaixo para
+                            começar a sincronizar.
                         </p>
                         <PlaudConnectTabs
                             onConnected={() => fetchConnection()}
@@ -301,30 +307,29 @@ export function PlaudAccountSection({
                     <DialogHeader>
                         <DialogTitle>
                             {confirmOpen === "switch"
-                                ? "Switch Plaud account?"
-                                : "Disconnect Plaud account?"}
+                                ? "Trocar a conta do Plaud?"
+                                : "Desconectar a conta do Plaud?"}
                         </DialogTitle>
                         <DialogDescription asChild>
                             <div className="space-y-2 pt-2">
                                 {confirmOpen === "switch" ? (
                                     <p>
-                                        This will unlink{" "}
+                                        Isso desvincula{" "}
                                         <span className="font-mono text-foreground">
                                             {currentEmailDisplay}
                                         </span>{" "}
-                                        and let you sign in with a different
-                                        Plaud account. Your existing recordings
-                                        stay; only future syncs will come from
-                                        the new account.
+                                        e deixa você entrar com outra conta do
+                                        Plaud. As capturas atuais ficam; só as
+                                        próximas virão da conta nova.
                                     </p>
                                 ) : (
                                     <p>
-                                        This will unlink{" "}
+                                        Isso desvincula{" "}
                                         <span className="font-mono text-foreground">
                                             {currentEmailDisplay}
                                         </span>
-                                        . Your existing recordings stay, but
-                                        sync will stop until you reconnect.
+                                        . As capturas atuais ficam, mas a
+                                        sincronização para até você reconectar.
                                     </p>
                                 )}
                             </div>
@@ -336,14 +341,14 @@ export function PlaudAccountSection({
                             onClick={() => setConfirmOpen(null)}
                             disabled={isMutating}
                         >
-                            Cancel
+                            Cancelar
                         </Button>
                         {confirmOpen === "switch" ? (
                             <Button
                                 onClick={handleSwitchConfirmed}
                                 disabled={isMutating}
                             >
-                                {isMutating ? "Unlinking…" : "Continue"}
+                                {isMutating ? "Desvinculando…" : "Continuar"}
                             </Button>
                         ) : (
                             <Button
@@ -351,7 +356,7 @@ export function PlaudAccountSection({
                                 onClick={handleDisconnect}
                                 disabled={isMutating}
                             >
-                                {isMutating ? "Disconnecting…" : "Disconnect"}
+                                {isMutating ? "Desconectando…" : "Desconectar"}
                             </Button>
                         )}
                     </DialogFooter>
@@ -366,10 +371,10 @@ export function PlaudAccountSection({
             >
                 <DialogContent className="max-w-lg">
                     <DialogHeader>
-                        <DialogTitle>Sign in to new Plaud account</DialogTitle>
+                        <DialogTitle>Entrar na nova conta do Plaud</DialogTitle>
                         <DialogDescription>
-                            Choose how you want to connect the Plaud account
-                            you’re switching to.
+                            Escolha como conectar a conta do Plaud que vai
+                            entrar.
                         </DialogDescription>
                     </DialogHeader>
                     {switchDialogOpen && (
@@ -390,10 +395,10 @@ export function PlaudAccountSection({
             >
                 <DialogContent className="max-w-lg">
                     <DialogHeader>
-                        <DialogTitle>Reconnect your Plaud account</DialogTitle>
+                        <DialogTitle>Reconectar sua conta do Plaud</DialogTitle>
                         <DialogDescription>
-                            Sign back in to resume syncing. Your existing
-                            recordings and transcripts are unaffected.
+                            Entre de novo para voltar a sincronizar. Suas
+                            capturas e transcrições não são afetadas.
                         </DialogDescription>
                     </DialogHeader>
                     {reconnectDialogOpen && (

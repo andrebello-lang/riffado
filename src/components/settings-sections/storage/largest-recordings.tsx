@@ -28,9 +28,9 @@ export function LargestRecordings({ items }: LargestRecordingsProps) {
     return (
         <div className="rounded-lg border bg-card">
             <div className="px-4 pt-3 pb-2">
-                <div className="text-sm font-medium">Largest recordings</div>
+                <div className="text-sm font-medium">Maiores capturas</div>
                 <div className="text-xs text-muted-foreground">
-                    Open a recording to preview it before deleting
+                    Abra uma captura para conferir antes de apagar
                 </div>
             </div>
             <ul className="divide-y">

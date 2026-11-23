@@ -1,6 +1,6 @@
 "use client";
 
-import { Command, Upload } from "lucide-react";
+import { Command, Plus } from "lucide-react";
 import { BrieffadoWordmark } from "@/components/brand/brieffado-logo";
 import { UserMenu } from "@/components/dashboard/user-menu";
 import { SyncButton } from "@/components/sync-button";
@@ -91,17 +91,17 @@ export function WorkstationHeader({
                             variant="outline"
                             size="sm"
                             className="hidden h-9 md:inline-flex"
-                            aria-label="Open command palette"
+                            aria-label="Abrir a busca e os comandos"
                         >
                             <Command className="mr-2 size-4" />
-                            <span>Search</span>
+                            <span>Buscar</span>
                             <kbd className="ml-2 hidden rounded border bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline">
                                 ⌘K
                             </kbd>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
-                        Search recordings, transcripts, and actions
+                        Buscar capturas, transcrições e ações
                     </TooltipContent>
                 </Tooltip>
                 <SyncButton
@@ -123,21 +123,20 @@ export function WorkstationHeader({
                         <Button
                             onClick={onTriggerUpload}
                             disabled={isProcessing}
-                            variant="outline"
                             size="sm"
-                            className="h-9"
+                            className="h-9 rounded-full px-4"
                             aria-label={
-                                isUploading ? "Uploading audio" : "Upload audio"
+                                isUploading ? "Enviando áudio" : "Enviar áudio"
                             }
                         >
-                            <Upload className="size-4 sm:mr-2" />
+                            <Plus className="size-4 sm:mr-1" />
                             <span className="hidden sm:inline">
-                                {isUploading ? "Uploading…" : "Upload Audio"}
+                                {isUploading ? "Enviando…" : "Nova captura"}
                             </span>
                         </Button>
                     </TooltipTrigger>
                     <TooltipContent side="bottom">
-                        Upload an audio file from your computer
+                        Enviar um áudio do computador como nova captura
                     </TooltipContent>
                 </Tooltip>
                 <UserMenu

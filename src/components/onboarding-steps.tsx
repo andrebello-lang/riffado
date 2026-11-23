@@ -25,13 +25,13 @@ export function OnboardingStepWelcome() {
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Mic className="size-4" />
-                            Connect Your Account
+                            Conecte sua conta
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground">
-                            Sign in with your Plaud email to sync recordings
-                            automatically
+                            Entre com o e-mail do Plaud para sincronizar as
+                            gravações sozinho
                         </p>
                     </CardContent>
                 </Card>
@@ -40,13 +40,13 @@ export function OnboardingStepWelcome() {
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Bot className="size-4" />
-                            Set Up AI Provider
+                            Configure a IA
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground">
-                            Configure an AI provider for automatic
-                            transcriptions
+                            Escolha um provedor de IA para transcrever
+                            automaticamente
                         </p>
                     </CardContent>
                 </Card>
@@ -55,13 +55,12 @@ export function OnboardingStepWelcome() {
                     <CardHeader>
                         <CardTitle className="text-base flex items-center gap-2">
                             <Sparkles className="size-4" />
-                            Start Recording
+                            Comece a capturar
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <p className="text-sm text-muted-foreground">
-                            You're all set! Start recording and let AI do the
-                            work
+                            Tudo pronto. Capture e deixe a IA fazer o resto.
                         </p>
                     </CardContent>
                 </Card>
@@ -86,11 +85,11 @@ export function OnboardingStepPlaud({
                     <Mic className="size-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold">
-                    Connect Your Plaud Account
+                    Conecte sua conta do Plaud
                 </h3>
                 <p className="text-muted-foreground">
-                    Sign in with your Plaud email to sync recordings
-                    automatically
+                    Entre com o e-mail do Plaud para sincronizar as gravações
+                    sozinho
                 </p>
             </div>
 
@@ -100,9 +99,9 @@ export function OnboardingStepPlaud({
                         <div className="flex items-center gap-3">
                             <CheckCircle2 className="size-5 text-primary" />
                             <div className="flex-1">
-                                <p className="font-medium">Device Connected</p>
+                                <p className="font-medium">Plaud conectado</p>
                                 <p className="text-sm text-muted-foreground">
-                                    Your Plaud account is connected
+                                    Sua conta do Plaud está conectada
                                 </p>
                             </div>
                             <Button
@@ -110,7 +109,7 @@ export function OnboardingStepPlaud({
                                 size="sm"
                                 onClick={onReconnect}
                             >
-                                Reconnect
+                                Reconectar
                             </Button>
                         </div>
                     </CardContent>
@@ -143,14 +142,12 @@ export function OnboardingStepAiProvider({
                     <Bot className="size-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold">
-                    {includedOnly
-                        ? "Transcription Included"
-                        : "Set Up AI Provider"}
+                    {includedOnly ? "Transcrição incluída" : "Configure a IA"}
                 </h3>
                 <p className="text-muted-foreground">
                     {includedOnly
-                        ? "Mynah transcription comes with your plan. You're ready to go."
-                        : "Configure an AI provider to enable automatic transcriptions"}
+                        ? "A transcrição Mynah vem no seu plano. Tudo pronto."
+                        : "Escolha um provedor de IA para ativar a transcrição automática"}
                 </p>
             </div>
 
@@ -161,10 +158,10 @@ export function OnboardingStepAiProvider({
                             <CheckCircle2 className="size-5 text-primary" />
                             <div className="flex-1">
                                 <p className="font-medium">
-                                    AI Provider Configured
+                                    Provedor de IA configurado
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    You already have your own AI provider set up
+                                    Você já tem um provedor de IA configurado
                                 </p>
                             </div>
                         </div>
@@ -193,7 +190,7 @@ export function OnboardingStepAiProvider({
                             variant="outline"
                             className="w-full"
                         >
-                            Add your own provider (optional)
+                            Adicionar seu próprio provedor (opcional)
                         </Button>
                     </CardContent>
                 </Card>
@@ -201,16 +198,16 @@ export function OnboardingStepAiProvider({
                 <Card className="gap-0 py-4">
                     <CardContent className="pt-6 space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            You can set up an AI provider later in Settings.
-                            This enables automatic transcription of your
-                            recordings.
+                            Dá para configurar a IA depois, em Configurações.
+                            Ela ativa a transcrição automática das suas
+                            capturas.
                         </p>
                         <Button
                             onClick={onGoToSettings}
                             variant="outline"
                             className="w-full"
                         >
-                            Go to Settings
+                            Ir para Configurações
                         </Button>
                     </CardContent>
                 </Card>
@@ -243,11 +240,11 @@ export function OnboardingStepComplete({
                             <CheckCircle2 className="size-5 text-primary mt-0.5" />
                             <div>
                                 <p className="font-medium">
-                                    Recordings sync automatically
+                                    As capturas chegam sozinhas
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Your Plaud device will sync recordings in
-                                    the background
+                                    O Plaud sincroniza as gravações em segundo
+                                    plano
                                 </p>
                             </div>
                         </div>
@@ -255,12 +252,12 @@ export function OnboardingStepComplete({
                             <CheckCircle2 className="size-5 text-primary mt-0.5" />
                             <div>
                                 <p className="font-medium">
-                                    AI-powered transcriptions
+                                    Transcrição com IA
                                 </p>
                                 <p className="text-sm text-muted-foreground">
                                     {hasIncludedProvider
-                                        ? "Mynah transcription is ready with your plan"
-                                        : "Set up an AI provider to transcribe recordings automatically"}
+                                        ? "A transcrição Mynah está pronta no seu plano"
+                                        : "Configure um provedor de IA para transcrever automaticamente"}
                                 </p>
                             </div>
                         </div>
@@ -268,11 +265,11 @@ export function OnboardingStepComplete({
                             <CheckCircle2 className="size-5 text-primary mt-0.5" />
                             <div>
                                 <p className="font-medium">
-                                    Customize your experience
+                                    Deixe do seu jeito
                                 </p>
                                 <p className="text-sm text-muted-foreground">
-                                    Adjust settings anytime from the Settings
-                                    menu
+                                    Ajuste o que quiser a qualquer momento em
+                                    Configurações
                                 </p>
                             </div>
                         </div>

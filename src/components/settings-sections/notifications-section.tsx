@@ -123,7 +123,7 @@ export function NotificationsSection() {
         if (!emailToTest) {
             setTestEmailStatus({
                 type: "error",
-                message: "Please enter an email address first",
+                message: "Informe um e-mail primeiro",
             });
             return;
         }
@@ -145,19 +145,22 @@ export function NotificationsSection() {
             if (response.ok) {
                 setTestEmailStatus({
                     type: "success",
-                    message: `Test email sent successfully to ${emailToTest}`,
+                    message: `E-mail de teste enviado para ${emailToTest}`,
                 });
             } else {
                 setTestEmailStatus({
                     type: "error",
-                    message: data.error || "Failed to send test email",
+                    message:
+                        data.error ||
+                        "Não foi possível enviar o e-mail de teste",
                 });
             }
         } catch (err) {
             console.error("Error sending test email:", err);
             setTestEmailStatus({
                 type: "error",
-                message: "Failed to send test email. Please try again.",
+                message:
+                    "Não foi possível enviar o e-mail de teste. Tente de novo.",
             });
         } finally {
             setIsSendingTestEmail(false);
@@ -175,8 +178,8 @@ export function NotificationsSection() {
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Notifications"
-                description="Choose how and when Riffado lets you know about new recordings and sync events."
+                title="Notificações"
+                description="Como e quando o Brieffado avisa sobre capturas novas e sincronizações."
                 icon={Bell}
             />
 
@@ -191,10 +194,10 @@ export function NotificationsSection() {
                                     className="size-4 text-muted-foreground"
                                     aria-hidden="true"
                                 />
-                                Browser notifications
+                                Notificações do navegador
                             </span>
                         }
-                        description="Show browser notifications for new recordings and sync events."
+                        description="Mostra notificações do navegador para capturas novas e sincronizações."
                         checked={browserNotifications}
                         onCheckedChange={handleBrowserNotificationsChange}
                         disabled={isSavingSettings}
@@ -211,10 +214,10 @@ export function NotificationsSection() {
                                     className="size-4 text-muted-foreground"
                                     aria-hidden="true"
                                 />
-                                Email notifications
+                                Notificações por e-mail
                             </span>
                         }
-                        description="Send email notifications for new recordings."
+                        description="Manda e-mail quando chegam capturas novas."
                         checked={emailNotifications}
                         onCheckedChange={handleEmailNotificationsChange}
                         disabled={isSavingSettings}
@@ -223,7 +226,7 @@ export function NotificationsSection() {
                     {emailNotifications && (
                         <div className="mt-3 space-y-2 border-t pt-3">
                             <Label htmlFor="notification-email">
-                                Email address
+                                Endereço de e-mail
                             </Label>
                             <Input
                                 id="notification-email"
@@ -238,8 +241,8 @@ export function NotificationsSection() {
                             />
                             <p className="text-xs text-muted-foreground">
                                 {userEmail && notificationEmail === userEmail
-                                    ? "Using your account email. You can change this to a different address if needed."
-                                    : "Email address to receive notifications."}
+                                    ? "Usando o e-mail da sua conta. Dá para trocar por outro endereço."
+                                    : "E-mail que recebe as notificações."}
                             </p>
                             <div className="flex items-center gap-2 pt-1">
                                 <Button
@@ -254,8 +257,8 @@ export function NotificationsSection() {
                                 >
                                     <Mail className="size-4" />
                                     {isSendingTestEmail
-                                        ? "Sending…"
-                                        : "Send test email"}
+                                        ? "Enviando…"
+                                        : "Enviar e-mail de teste"}
                                 </Button>
                                 {testEmailStatus.type && (
                                     <p
@@ -283,10 +286,10 @@ export function NotificationsSection() {
                                     className="size-4 text-muted-foreground"
                                     aria-hidden="true"
                                 />
-                                Bark push notifications
+                                Notificações push pelo Bark
                             </span>
                         }
-                        description="Send push notifications via Bark for new recordings."
+                        description="Manda push pelo Bark quando chegam capturas novas."
                         checked={barkNotifications}
                         onCheckedChange={handleBarkNotificationsChange}
                         disabled={isSavingSettings}
@@ -294,7 +297,9 @@ export function NotificationsSection() {
 
                     {barkNotifications && (
                         <div className="mt-3 space-y-2 border-t pt-3">
-                            <Label htmlFor="bark-push-url">Bark push URL</Label>
+                            <Label htmlFor="bark-push-url">
+                                URL de push do Bark
+                            </Label>
                             <Input
                                 id="bark-push-url"
                                 type="url"
@@ -305,7 +310,7 @@ export function NotificationsSection() {
                                 placeholder="https://api.day.app/your_key"
                             />
                             <p className="text-xs text-muted-foreground">
-                                Copy the full push URL from the Bark app (e.g.,
+                                Copie a URL de push completa do app Bark (ex.:
                                 https://api.day.app/your_key).
                             </p>
                         </div>
@@ -322,10 +327,10 @@ export function NotificationsSection() {
                                     className="size-4 text-muted-foreground"
                                     aria-hidden="true"
                                 />
-                                Notification sound
+                                Som de notificação
                             </span>
                         }
-                        description="Play a sound when notifications are received."
+                        description="Toca um som quando chega uma notificação."
                         checked={notificationSound}
                         onCheckedChange={(checked) => {
                             setNotificationSound(checked);
@@ -344,10 +349,10 @@ export function NotificationsSection() {
                                     className="size-4 text-muted-foreground"
                                     aria-hidden="true"
                                 />
-                                Product updates
+                                Novidades do Riffado
                             </span>
                         }
-                        description="Occasional emails about new features and releases. A few times a year at most, never more than once a month."
+                        description="E-mails ocasionais do projeto Riffado sobre novidades. No máximo algumas vezes por ano."
                         checked={marketingEmailConsent}
                         onCheckedChange={(checked) => {
                             setMarketingEmailConsent(checked);

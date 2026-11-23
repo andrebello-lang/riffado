@@ -52,13 +52,13 @@ export function UsageHero({
         capacity = {
             used: usedBytes,
             total: quotaBytes,
-            remainingLabel: `${formatBytes(Math.max(0, quotaBytes - usedBytes))} remaining`,
+            remainingLabel: `${formatBytes(Math.max(0, quotaBytes - usedBytes))} livres`,
         };
     } else if (typeof diskFreeBytes === "number" && diskFreeBytes >= 0) {
         capacity = {
             used: usedBytes,
             total: usedBytes + diskFreeBytes,
-            remainingLabel: `${formatBytes(diskFreeBytes)} free on disk`,
+            remainingLabel: `${formatBytes(diskFreeBytes)} livres no disco`,
         };
     }
 
@@ -78,21 +78,21 @@ export function UsageHero({
                 )}
                 <div className="min-w-0">
                     <div className="text-xs uppercase tracking-wide text-muted-foreground">
-                        Storage used
+                        Espaço usado
                     </div>
                     <div className="mt-1 text-sm text-muted-foreground">
                         {recordingCount.toLocaleString()}{" "}
-                        {recordingCount === 1 ? "recording" : "recordings"}
+                        {recordingCount === 1 ? "captura" : "capturas"}
                         {totalDurationMs > 0 && (
                             <>
                                 {" · "}
-                                {formatHoursCompact(totalDurationMs)} total
+                                {formatHoursCompact(totalDurationMs)} no total
                             </>
                         )}
                         {avgBytes > 0 && (
                             <>
                                 {" · "}
-                                {formatBytes(avgBytes)} avg
+                                {formatBytes(avgBytes)} em média
                             </>
                         )}
                     </div>
@@ -149,9 +149,7 @@ function CapacityRing({ used, total, usedBytes }: CapacityRingProps) {
                 role="img"
                 aria-labelledby={`${id}-title`}
             >
-                <title id={`${id}-title`}>
-                    Storage capacity: {pctLabel} used
-                </title>
+                <title id={`${id}-title`}>Capacidade: {pctLabel} usado</title>
                 {/* Track */}
                 <circle
                     cx={size / 2}

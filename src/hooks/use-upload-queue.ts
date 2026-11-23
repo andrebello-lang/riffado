@@ -57,14 +57,14 @@ export function useUploadQueue({ onUploadComplete }: Options) {
                 });
                 if (response.ok) {
                     const data = await response.json();
-                    toast.success(`"${data.filename}" uploaded`);
+                    toast.success(`"${data.filename}" enviado`);
                     onUploadComplete();
                 } else {
                     const error = await response.json();
-                    toast.error(error.error || "Upload failed");
+                    toast.error(error.error || "Falha no envio");
                 }
             } catch {
-                toast.error("Failed to upload recording");
+                toast.error("Não foi possível enviar o áudio");
             } finally {
                 setIsUploading(false);
                 setPendingUploads((prev) =>

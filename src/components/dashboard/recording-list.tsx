@@ -20,7 +20,6 @@ import {
     type SortOrder,
 } from "@/components/dashboard/recording-list-toolbar";
 import { RecordingRow } from "@/components/dashboard/recording-row";
-import { Card, CardContent } from "@/components/ui/card";
 import { dateGroupLabel } from "@/lib/format-date";
 import type { DateTimeFormat } from "@/types/common";
 import type { Recording } from "@/types/recording";
@@ -246,8 +245,8 @@ export function RecordingList({
     const rowPadding = isCompact ? "px-4 py-2" : "px-4 py-3";
 
     return (
-        <Card hasNoPadding>
-            <CardContent className="p-0">
+        <div>
+            <div>
                 <RecordingListToolbar
                     query={query}
                     onQueryChange={setQuery}
@@ -281,11 +280,11 @@ export function RecordingList({
                             key={group.label ?? `__ungrouped-${gi.toString()}`}
                         >
                             {group.label && (
-                                <div className="sticky top-0 z-10 bg-background/85 px-4 pt-2 pb-0.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-muted-foreground/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                                <div className="sticky top-0 z-10 bg-background/85 px-1 pt-3 pb-1.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-muted-foreground/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                                     {group.label}
                                 </div>
                             )}
-                            <div className="divide-y">
+                            <div className="space-y-2">
                                 {group.items.map((recording) => (
                                     <RecordingRow
                                         key={recording.id}
@@ -318,15 +317,15 @@ export function RecordingList({
                             <Mic className="mb-2 size-8 text-muted-foreground" />
                             <p className="text-sm text-muted-foreground">
                                 {query
-                                    ? "No recordings match your search."
-                                    : "No recordings yet."}
+                                    ? "Nenhuma captura encontrada na busca."
+                                    : "Nenhuma captura por aqui ainda."}
                             </p>
                         </div>
                     )}
 
                     <div ref={sentinelRef} className="h-4" aria-hidden="true" />
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 }

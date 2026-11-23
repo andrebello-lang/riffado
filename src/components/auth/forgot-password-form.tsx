@@ -48,7 +48,7 @@ export function ForgotPasswordForm({
             if (result?.error?.status === 429) {
                 toast.error(
                     result.error.message ||
-                        "Too many requests. Please wait a moment and try again.",
+                        "Muitas tentativas. Aguarde um pouco e tente de novo.",
                 );
                 return;
             }
@@ -59,7 +59,7 @@ export function ForgotPasswordForm({
             const message =
                 error instanceof Error
                     ? error.message
-                    : "Could not send reset email. Please try again.";
+                    : "Não foi possível enviar o e-mail. Tente de novo.";
             toast.error(message);
         } finally {
             setIsLoading(false);
@@ -71,38 +71,36 @@ export function ForgotPasswordForm({
             {!smtpConfigured ? (
                 <div className="space-y-3 rounded-md border border-border bg-muted/40 p-4 text-sm">
                     <p className="font-medium">
-                        Password reset is unavailable on this instance.
+                        A troca de senha não está disponível neste Brieffado.
                     </p>
                     <p className="text-muted-foreground">
-                        The administrator hasn't configured SMTP, so reset
-                        emails can't be delivered. Set{" "}
+                        O envio de e-mail (SMTP) não foi configurado, então o
+                        e-mail de troca não pode ser enviado. Configure{" "}
                         <code className="font-mono text-xs">SMTP_HOST</code>,{" "}
-                        <code className="font-mono text-xs">SMTP_USER</code>,
-                        and{" "}
+                        <code className="font-mono text-xs">SMTP_USER</code>, e{" "}
                         <code className="font-mono text-xs">SMTP_PASSWORD</code>{" "}
-                        in the server environment to enable it. In the meantime,
-                        ask your administrator to reset your password directly
-                        in the database.
+                        no servidor para ativar. Enquanto isso, a senha pode ser
+                        trocada direto no banco de dados.
                     </p>
                 </div>
             ) : submitted ? (
                 <div className="space-y-3 rounded-md border border-border bg-muted/40 p-4 text-sm">
-                    <p className="font-medium">Check your email.</p>
+                    <p className="font-medium">Confira seu e-mail.</p>
                     <p className="text-muted-foreground">
-                        If an account exists for{" "}
+                        Se existir uma conta para{" "}
                         <span className="font-mono text-xs">{email}</span>,
-                        we've sent a password reset link. The link expires in 1
-                        hour.
+                        enviamos um link para trocar a senha. O link vale por 1
+                        hora.
                     </p>
                 </div>
             ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">E-mail</Label>
                         <Input
                             id="email"
                             type="email"
-                            placeholder="you@example.com"
+                            placeholder="voce@exemplo.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -117,7 +115,7 @@ export function ForgotPasswordForm({
                         variant="cyan"
                         disabled={isLoading}
                     >
-                        {isLoading ? "Sending..." : "Send reset link"}
+                        {isLoading ? "Enviando..." : "Enviar link"}
                     </MetalButton>
                 </form>
             )}
@@ -127,7 +125,7 @@ export function ForgotPasswordForm({
                     href="/login"
                     className="text-accent-cyan hover:underline"
                 >
-                    Back to sign in
+                    Voltar para entrar
                 </Link>
             </div>
         </div>

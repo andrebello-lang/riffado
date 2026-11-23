@@ -59,7 +59,7 @@ export function SettingsNavSidebar({
             */}
             <div className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
                 <SettingsIcon className="size-5" />
-                <h2 className="text-lg font-semibold">Settings</h2>
+                <h2 className="text-lg font-semibold">Configurações</h2>
             </div>
             <SidebarContent className="min-h-0">
                 {/*
@@ -71,7 +71,10 @@ export function SettingsNavSidebar({
                   li nesting which is invalid HTML and confuses screen
                   readers.
                 */}
-                <nav aria-label="Settings sections" className="space-y-4">
+                <nav
+                    aria-label="Seções das configurações"
+                    className="space-y-4"
+                >
                     {settingsNavGroups.map((group) => (
                         <SidebarGroup key={group.label} className="space-y-1">
                             <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">

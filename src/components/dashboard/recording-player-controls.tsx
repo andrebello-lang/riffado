@@ -63,7 +63,7 @@ export function RecordingPlayerControls({
             <Button
                 onClick={onTogglePlay}
                 size="lg"
-                aria-label={isPlaying ? "Pause" : "Play"}
+                aria-label={isPlaying ? "Pausar" : "Tocar"}
                 className="size-12 shrink-0 rounded-full"
             >
                 {isPlaying ? (
@@ -127,8 +127,8 @@ export function RecordingPlayerControls({
                 variant="outline"
                 size="sm"
                 className="h-8 w-12 shrink-0 px-0 font-mono text-xs tabular-nums"
-                title="Click to cycle playback speed"
-                aria-label={`Playback speed ${speedLabel}. Click to change.`}
+                title="Clique para mudar a velocidade"
+                aria-label={`Velocidade ${speedLabel}. Clique para mudar.`}
             >
                 {speedLabel}
             </Button>
@@ -138,8 +138,8 @@ export function RecordingPlayerControls({
                     type="button"
                     onClick={onToggleMute}
                     className="text-muted-foreground transition-colors hover:text-foreground"
-                    aria-label={volume === 0 ? "Unmute" : "Mute"}
-                    title={volume === 0 ? "Unmute" : "Mute"}
+                    aria-label={volume === 0 ? "Ativar som" : "Silenciar"}
+                    title={volume === 0 ? "Ativar som" : "Silenciar"}
                 >
                     {speakerIcon}
                 </button>

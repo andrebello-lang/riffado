@@ -16,10 +16,10 @@ export default async function ForgotPasswordPage() {
     // subtitle is fine. On self-host, SMTP may not be configured -- the
     // form body explains the operator help in that case; the subtitle
     // here stays neutral so it reads correctly either way.
-    const title = "Reset password";
+    const title = "Trocar a senha";
     const subtitle = smtp
-        ? "We'll email you a link to set a new password."
-        : "Password reset requires SMTP to be configured.";
+        ? "Vamos mandar um link por e-mail para você criar uma senha nova."
+        : "A troca de senha precisa do envio de e-mail (SMTP) configurado.";
 
     if (env.IS_HOSTED) {
         return (

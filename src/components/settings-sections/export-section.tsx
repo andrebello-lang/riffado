@@ -17,17 +17,17 @@ import { Switch } from "@/components/ui/switch";
 import { useSettings } from "@/hooks/use-settings";
 
 const exportFormatOptions = [
-    { label: "JSON", value: "json", description: "Structured data format" },
-    { label: "TXT", value: "txt", description: "Plain text format" },
-    { label: "SRT", value: "srt", description: "Subtitle format" },
-    { label: "VTT", value: "vtt", description: "WebVTT subtitle format" },
+    { label: "JSON", value: "json", description: "Dados estruturados" },
+    { label: "TXT", value: "txt", description: "Texto simples" },
+    { label: "SRT", value: "srt", description: "Legenda" },
+    { label: "VTT", value: "vtt", description: "Legenda WebVTT" },
 ];
 
 const backupFrequencyOptions = [
-    { label: "Never", value: "never" },
-    { label: "Daily", value: "daily" },
-    { label: "Weekly", value: "weekly" },
-    { label: "Monthly", value: "monthly" },
+    { label: "Nunca", value: "never" },
+    { label: "Diário", value: "daily" },
+    { label: "Semanal", value: "weekly" },
+    { label: "Mensal", value: "monthly" },
 ];
 
 interface ExportJobStatus {
@@ -129,9 +129,9 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                     if (!cancelled) {
                         setBackupJob(data.job);
                         if (data.job.status === "completed") {
-                            toast.success("Backup ready to download");
+                            toast.success("Backup pronto para baixar");
                         } else if (data.job.status === "failed") {
-                            toast.error("Backup failed to build");
+                            toast.error("O backup falhou");
                         }
                     }
                 }
@@ -193,7 +193,9 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                 if (typeof prev === "string" || prev === null)
                     setBackupFrequency(prev);
             }
-            toast.error("Failed to save settings. Changes reverted.");
+            toast.error(
+                "Não foi possível salvar. As mudanças foram desfeitas.",
+            );
         }
     };
 
@@ -219,9 +221,9 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
 
-            toast.success("Export completed");
+            toast.success("Exportação concluída");
         } catch {
-            toast.error("Failed to export recordings");
+            toast.error("Não foi possível exportar as capturas");
         } finally {
             setIsExporting(false);
         }
@@ -236,11 +238,11 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
             setBackupJob(data.job);
             toast.success(
                 ACTIVE_STATUSES.has(data.job.status)
-                    ? "Backup started -- this can take a few minutes for large libraries"
-                    : "Backup ready to download",
+                    ? "Backup iniciado. Pode levar alguns minutos se houver muitas capturas."
+                    : "Backup pronto para baixar",
             );
         } catch {
-            toast.error("Failed to start backup");
+            toast.error("Não foi possível iniciar o backup");
         } finally {
             setIsStartingBackup(false);
         }
@@ -257,13 +259,15 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
     return (
         <div className="space-y-6">
             <SettingsSectionHeader
-                title="Export & Backup"
-                description="Take your data with you: recordings, transcripts, and summaries."
+                title="Exportar e backup"
+                description="Leve seus dados com você: capturas, transcrições e resumos."
                 icon={Download}
             />
             <div className="space-y-4">
                 <div className="space-y-2">
-                    <Label htmlFor="export-format">Default export format</Label>
+                    <Label htmlFor="export-format">
+                        Formato padrão de exportação
+                    </Label>
                     <Select
                         value={defaultExportFormat}
                         onValueChange={(value) => {
@@ -303,14 +307,14 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                     <div className="space-y-0.5 flex-1">
                         <div className="flex items-center gap-2">
                             <Label htmlFor="auto-export" className="text-base">
-                                Auto-export new recordings
+                                Exportar capturas novas automaticamente
                             </Label>
                             <span className="text-xs bg-muted px-2 py-0.5 rounded">
-                                Coming soon
+                                Em breve
                             </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                            Automatically export recordings when they are synced
+                            Exporta as capturas assim que forem sincronizadas
                         </p>
                     </div>
                     <Switch
@@ -329,10 +333,10 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                 <div className="space-y-2 opacity-60">
                     <div className="flex items-center gap-2">
                         <Label htmlFor="backup-frequency">
-                            Backup frequency
+                            Frequência do backup
                         </Label>
                         <span className="text-xs bg-muted px-2 py-0.5 rounded">
-                            Coming soon
+                            Em breve
                         </span>
                     </div>
                     <Select
@@ -352,7 +356,7 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                                     (opt) =>
                                         opt.value ===
                                         (backupFrequency || "never"),
-                                )?.label || "Never"}
+                                )?.label || "Nunca"}
                             </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
@@ -367,14 +371,14 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                         </SelectContent>
                     </Select>
                     <p className="text-xs text-muted-foreground">
-                        How often to automatically create backups
+                        De quanto em quanto tempo criar backups automáticos
                     </p>
                 </div>
             </div>
 
             <div className="pt-4 border-t space-y-3">
                 <div className="space-y-2">
-                    <Label className="text-base">Manual Actions</Label>
+                    <Label className="text-base">Ações</Label>
                     <Button
                         onClick={async () => {
                             try {
@@ -389,17 +393,19 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                                 });
                                 onReRunOnboarding?.();
                             } catch {
-                                toast.error("Failed to reset onboarding");
+                                toast.error(
+                                    "Não foi possível reiniciar a configuração inicial",
+                                );
                             }
                         }}
                         variant="outline"
                         className="w-full"
                     >
                         <RefreshCw className="size-4 mr-2" />
-                        Re-run Onboarding
+                        Refazer a configuração inicial
                     </Button>
                     <p className="text-xs text-muted-foreground">
-                        Reset onboarding to see it again on your next visit
+                        Mostra a configuração inicial de novo na próxima visita
                     </p>
                     <div className="flex gap-2 pt-2">
                         <Button
@@ -416,7 +422,7 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                             ) : (
                                 <>
                                     <Download className="size-4 mr-2" />
-                                    Export text
+                                    Exportar texto
                                 </>
                             )}
                         </Button>
@@ -440,26 +446,25 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                             ) : (
                                 <>
                                     <Download className="size-4 mr-2" />
-                                    Create full backup
+                                    Criar backup completo
                                 </>
                             )}
                         </Button>
                     </div>
                     <p className="text-xs text-muted-foreground">
-                        "Export text" downloads transcripts + summaries
-                        instantly. "Create full backup" also bundles the
-                        original audio into a zip archive; large libraries take
-                        a few minutes to build in the background, and you'll get
-                        an email when it's ready. A backup stays available for 7
-                        days. A newer backup that includes all your audio
-                        replaces the previous one.
+                        "Exportar texto" baixa na hora as transcrições e os
+                        resumos. "Criar backup completo" também junta os áudios
+                        originais num arquivo zip; com muitas capturas leva
+                        alguns minutos e você recebe um e-mail quando ficar
+                        pronto. O backup fica disponível por 7 dias, e um backup
+                        novo com todos os áudios substitui o anterior.
                     </p>
                     {backupJob && (
                         <div className="rounded-md border p-3 text-sm space-y-1">
                             {backupJob.status === "completed" && (
                                 <div className="flex items-center justify-between gap-2">
                                     <span>
-                                        Backup ready
+                                        Backup pronto
                                         {backupJob.recordingCount !== null &&
                                             ` \u2014 ${backupJob.recordingCount} recording${backupJob.recordingCount === 1 ? "" : "s"}`}
                                         {backupJob.fileSize !== null &&
@@ -470,14 +475,14 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                                             href={`/api/backup/${backupJob.id}/download`}
                                         >
                                             <Download className="size-4 mr-2" />
-                                            Download
+                                            Baixar
                                         </a>
                                     </Button>
                                 </div>
                             )}
                             {ACTIVE_STATUSES.has(backupJob.status) && (
                                 <span className="text-muted-foreground">
-                                    Building your archive
+                                    Montando o arquivo
                                     {backupJob.status === "pending"
                                         ? " (queued)"
                                         : ""}
@@ -486,14 +491,13 @@ export function ExportSection({ onReRunOnboarding }: ExportSectionProps) {
                             )}
                             {backupJob.status === "failed" && (
                                 <span className="text-destructive">
-                                    Backup failed to build. Try again, or
-                                    contact support if it keeps failing.
+                                    O backup falhou. Tente de novo.
                                 </span>
                             )}
                             {backupJob.status === "expired" && (
                                 <span className="text-muted-foreground">
-                                    That backup has expired. Create a new one to
-                                    download it again.
+                                    Esse backup expirou. Crie um novo para
+                                    baixar de novo.
                                 </span>
                             )}
                         </div>
